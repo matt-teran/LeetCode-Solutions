@@ -4,7 +4,14 @@
  * @return {boolean[]}
  */
 var kidsWithCandies = function(candies, extraCandies) {
-    let largest = [...candies].sort((a, b) => b - a)[0] - extraCandies;
+    let largest = candies[0] - extraCandies;
+    
+    for (let i = 1; i < candies.length; i++) {
+        if (largest < candies[i] - extraCandies) {
+            largest = candies[i] - extraCandies;
+        }
+    }
+    
     
     return candies.map(candy => candy < largest ? false : true);
     
