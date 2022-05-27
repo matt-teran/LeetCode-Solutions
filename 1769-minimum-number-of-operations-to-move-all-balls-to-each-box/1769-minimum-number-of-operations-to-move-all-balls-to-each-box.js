@@ -3,19 +3,15 @@
  * @return {number[]}
  */
 var minOperations = function(boxes) {
-    let result = [];
-    
-    for (let i = 0; i < boxes.length; i++) {
+    return boxes.split('').map((x, i) => {
         let distance = 0;
-        
-        for (let j = 0; j < boxes.length; j++) {
+        let j = 0;
+        while (j < boxes.length) {
             if (i !== j && boxes[j] === '1') {
                 distance += Math.abs(i - j);
             };
+            j++;
         }
-        
-        result.push(distance);
-    }
-    
-    return result;
+        return distance;
+    })
 };
