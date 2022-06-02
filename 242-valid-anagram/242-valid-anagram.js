@@ -20,9 +20,7 @@ var isAnagram = function(s, t) {
     }
     // compare hashmaps, if any properties are different, return false
     for (const [k, v] of Object.entries(sMap)) {
-        if (!(k in tMap)) {
-            return false;
-        } else if (v !== tMap[k]) {
+        if (!(k in tMap) || v !== tMap[k]) {
             return false;
         }
     }
