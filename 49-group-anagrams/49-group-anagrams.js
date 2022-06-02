@@ -10,36 +10,20 @@
 var groupAnagrams = function(strs) {
     if (strs.length === 1) return [strs];
     let map = {};
-
-    for (let str of strs) {
+    for (let i = 0; i < strs.length; i++) {
         let count = new Array(26).fill(0);
         
-        for (let char of str) {
-            count[char.charCodeAt() - 97]++;
+        for (let j = 0; j < strs[i].length; j++) {
+            count[strs[i][j].charCodeAt() - 97]++;
         }
-        // console.log(count.join());
+        
         let k = count.join('#')
-        console.log(k)
         
         if (map[k]) {
-            map[k].push(str) 
+            map[k].push(strs[i]) 
         } else {
-            map[k] = [str];
+            map[k] = [strs[i]];
         }
     }
-    // return the values
-    // console.log(map);
     return Object.values(map);
 };
-// O(n^2 * log n)
-
-// var groupAnagrams = function(strs) {
-//     let res = {};
-//     for (let str of strs) {
-//         let count = new Array(26).fill(0);
-//         for (let char of str) count[char.charCodeAt()-97]++;
-//         let key = count.join("#");
-//         res[key] ? res[key].push(str) : res[key] = [str];
-//     }
-//     return Object.values(res);
-// };
