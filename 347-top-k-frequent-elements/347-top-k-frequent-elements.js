@@ -11,11 +11,26 @@
 var topKFrequent = function(nums, k) {
     // keep track of freq w/ hashmap
     let map = {};
+    let freq = Array.from(Array(nums.length + 1), () => new Array());
     for (let num of nums) {
         map[num] ? map[num]++ : map[num] = 1;
     }
     // create array of k-v pairs/
-    return Object.entries(map).map(([k, v]) => [k, v]).sort((a, b) => b[1] - a[1]).slice(0, k).map(num => num[0]);
-    // sort in descending order
-    // return first k elements in array
+    // Object.entries(map).forEach(([n, c]) => {
+    //     freq[c].push(n);
+    // })
+    for (const [n, c] of Object.entries(map)) {
+        // console.log(freq);
+        freq[c].push(n)
+    }
+    // console.log(map, freq);
+    let result = [];
+    for (let i = freq.length - 1; i > -1; i--) {
+        for (let j = 0; j < freq[i].length; j++) {
+            result.push(freq[i][j]);
+            if (result.length === k) return result;
+        }
+    }
 };
+
+// O(3n * log n)
