@@ -13,15 +13,15 @@ var lengthOfLongestSubstring = function(s) {
     // set two pointers, i @ 0, j @ 1
     let i = 0;
     let j = 0;
-    for (j; j <= s.length; j++) {
-        //check if current range has duplicates, advance window
-        if ([...new Set(s.substring(i, j))].length !== j - i) {
+    let hashset = new Set();
+    let result = 0;
+    for (j; j < s.length; j++) {
+        while (hashset.has(s[j])) {
+            hashset.delete(s[i]);
             i++;
         }
-        //else expand 
+        hashset.add(s[j]);
+        result = Math.max(result, j - i + 1);
     }
-    if ([...new Set(s.substring(i, j))].length !== j - i) {
-            j--;
-        }
-    return j - i;
+    return result;
 };
