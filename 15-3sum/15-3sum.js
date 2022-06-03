@@ -10,6 +10,7 @@ var threeSum = function (nums) {
     nums.sort((a, b) => a - b);
     // loop through array
     for (let i = 0; i < nums.length; i++) {
+        if (nums[i] === nums[i - 1]) continue;
         let target = 0 - nums[i];
         // for each itn. set the target to be 0 - itn
         let j = i + 1;
@@ -22,6 +23,9 @@ var threeSum = function (nums) {
             } else {
                 result.add(JSON.stringify([nums[i], nums[j], nums[k]]));
                 j++;
+                while (nums[j] === nums[j - 1] && j < k) {
+                    j++;
+                }
             }
         }
         // use two pointers in sub array to find target
