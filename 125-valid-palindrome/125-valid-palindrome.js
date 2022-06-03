@@ -8,6 +8,7 @@
 // constraints: string length > 0
 // edge case: string length of 1
 var isPalindrome = function(s) {
+    return s.replace(/[^0-9a-z]/gi, '').toLowerCase() === s.replace(/[^0-9a-z]/gi, '').toLowerCase().split('').reverse().join('');
     // remove all non-alphanumeric chars from string
     s = s.replace(/[^0-9a-z]/gi, '');
     // turn string to lowercase
