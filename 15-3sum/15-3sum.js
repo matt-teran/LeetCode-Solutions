@@ -5,7 +5,7 @@
 
 var threeSum = function (nums) {
     if (nums.length < 3) return [];
-    let result = new Set();
+    let result = [];
     // sort array
     nums.sort((a, b) => a - b);
     // loop through array
@@ -21,7 +21,7 @@ var threeSum = function (nums) {
             } else if (nums[j] + nums[k] < target) {
                 j++;
             } else {
-                result.add(JSON.stringify([nums[i], nums[j], nums[k]]));
+                result.push([nums[i], nums[j], nums[k]]);
                 j++;
                 while (nums[j] === nums[j - 1] && j < k) {
                     j++;
@@ -33,7 +33,7 @@ var threeSum = function (nums) {
     }
     //remove duplicates
     
-    return [...result].map(arr => JSON.parse(arr));
+    return result;
 };
 // [-1,0,1,2,-1,-4]
 // [-4, -1, -1, 0, 1, 2]
