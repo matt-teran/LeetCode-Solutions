@@ -12,10 +12,12 @@ var characterReplacement = function(s, k) {
     let l = 0;
     let r = 0;
     let result = 0;
+    let maxFreq = 0
     
     for (r; r < s.length; r++) {
         count[s[r]] = 1 + (count[s[r]] || 0);
-        while (r - l + 1 - Math.max(...Object.values(count)) > k) {
+        maxFreq = Math.max(maxFreq, count[s[r]]);
+        while (r - l + 1 - maxFreq > k) {
             count[s[l]]--;
             l++;
         }
