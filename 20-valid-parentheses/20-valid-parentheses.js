@@ -13,10 +13,9 @@ var isValid = function(s) {
         '}': '{',
         ']': '['
     }
-    let openings = new Set(['[', '(', '{']);
     let stack = [];
     for (let p of s) {
-        if (openings.has(p)) {
+        if (!(p in map)) {
             stack.push(p)
         } else {
             if (stack[stack.length - 1] === map[p]) {
