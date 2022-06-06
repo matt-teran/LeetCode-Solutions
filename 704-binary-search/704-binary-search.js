@@ -4,23 +4,19 @@
  * @return {number}
  */
 var search = function(nums, target) {
-    let prev = [];
-    const bSearch = (l, r) => {
+    let l = 0;
+    let r = nums.length - 1;
+    
+    while (l <= r) {
         let m = Math.floor((l + r) / 2);
-        if (prev.length > 1 && prev[prev.length - 2] === m) return -1;
-        prev.push(m)
-        if (nums[m] === target) {
-            return m;
-        } else if (nums[m] < target) {
-            console.log(l, r);
-            return bSearch(Math.ceil((l + r)/ 2), r);
+        
+        if (nums[m] < target) {
+            l = m + 1;            
+        } else if (nums[m] > target) {
+            r = m - 1;
         } else {
-            return bSearch(l, m);
+            return m;
         }
     }
-    return bSearch(0, nums.length - 1);
-    // select middle num
-    // if num < target, search upper half
-    // if num > target search lower half
-    // if num === target, return index
+    return -1;
 };
