@@ -28,7 +28,6 @@ var carFleet = function(target, position, speed) {
         i++;
     }
     if (fleet.length) fleets.push(fleet);
-    console.log(cars);
     return fleets.length;
 };
 
