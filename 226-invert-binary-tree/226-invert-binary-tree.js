@@ -13,17 +13,12 @@
 var invertTree = function(root) {
     if (!root) return root;
     
-    // let node = root;
-    const swap = (node) => {
-        if (node === null) return;
-        let temp = node.left;
-        node.left = node.right;
-        node.right = temp;
+    let temp = root.left;
+    root.left = root.right;
+    root.right = temp;
         
-        swap(node.left);
-        swap(node.right);
-    }
-    swap(root);
+    invertTree(root.left);
+    invertTree(root.right);
     
     return root;
 };
