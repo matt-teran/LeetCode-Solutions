@@ -11,19 +11,6 @@
  * @return {number}
  */
 var maxDepth = function(root) {
-    if (!root) return root;
-    
-    let depth = 0;
-    
-    const drill = (node, count) => {
-        count++;
-        if (node.left) drill(node.left, count);
-        if (node.right) drill(node.right, count);
-        
-        if (count > depth) depth = count;
-    }
-    
-    drill(root, depth);
-    
-    return depth;
+    if (!root) return 0;
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
 };
