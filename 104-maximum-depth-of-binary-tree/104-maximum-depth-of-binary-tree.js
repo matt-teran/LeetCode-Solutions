@@ -12,5 +12,22 @@
  */
 var maxDepth = function(root) {
     if (!root) return 0;
-    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+    let level = 0;
+    let q = [root];
+    
+    while (q.length){
+        let qlen = q.length
+        for (let i = 0; i < qlen; i++){
+            let node = q.shift();
+            if (node.left) {
+                q.push(node.left);
+            }
+            if (node.right) {
+                q.push(node.right);
+            }
+        }
+        level++;
+    }
+    
+    return level;
 };
