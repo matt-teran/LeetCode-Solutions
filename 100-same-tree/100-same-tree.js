@@ -19,9 +19,6 @@ var isSameTree = function(p, q) {
     };
     
     if (p.val !== q.val) return false;
-    let res = true;
     
-    if (!isSameTree(p.left, q.left) || !isSameTree(p.right, q.right)) res = false;
-    
-    return res;
+    return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
 };
