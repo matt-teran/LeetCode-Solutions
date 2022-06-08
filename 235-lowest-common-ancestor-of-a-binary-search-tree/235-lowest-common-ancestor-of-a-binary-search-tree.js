@@ -15,29 +15,14 @@
 var lowestCommonAncestor = function(root, p, q) {
     let res = root;
     
-    // traverse the tree
-    // search tree at node for p && q vals
-    // if exist, continue search on left and right nodes
-    // else => kill recursion
-    
-    const contains = (node, s) => {
-        if (!node) return null;
-        if (node.val === s.val) return true;
-        
-        return contains(node.left, s) || contains(node.right, s);
-    };
-    
-    const dfs = (node) => {
-        if (!node) return null;
-        
-        if (contains(node, p) && contains(node, q)) {
-            res = node;
-            dfs(node.left);
-            dfs(node.right);
-        };
+    while (res) {
+        if (p.val > res.val && q.val > res.val) {
+            res = res.right;
+        } else if (p.val < res.val && q.val < res.val) {
+            res = res.left;
+        } else {
+            return res;
+        }
     }
-    
-    dfs(root);
-    
     return res;
 };
