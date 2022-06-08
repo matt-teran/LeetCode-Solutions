@@ -12,35 +12,20 @@
  * @return {boolean}
  */
 var isSubtree = function(root, subRoot) {
-    // traverse tree
-    // if any root node value === subroot value => compare the trees
-    // else skip
-    let res = false;
-    const dfs = (node) => {
-        if (!node) return node;
-        
-        if (node.val === subRoot.val) {
-            if (compare(node, subRoot)) {
-                res = true;
-                return;
-            }
-        }
-        
-        dfs(node.left);
-        dfs(node.right);
-    }
+    if (!subRoot) return true;
+    if (!root) return false;
     
-    const compare = (a, b) => {
-        if (a === null && b === null) {
-            return true;
-        } else if (a === null || b === null || a.val !== b.val) {
-            return false;
-        }
-        
-        return compare(a.left, b.left) && compare(a.right, b.right);
-    }
+    if (compare(root, subRoot)) return true;
     
-    dfs(root);
-    
-    return res;
+    return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
 };
+
+const compare = (a, b) => {
+    if (a === null && b === null) {
+        return true;
+    } else if (a === null || b === null || a.val !== b.val) {
+        return false;
+    }
+
+    return compare(a.left, b.left) && compare(a.right, b.right);
+}
