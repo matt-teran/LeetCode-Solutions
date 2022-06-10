@@ -11,17 +11,13 @@
  * @return {boolean}
  */
 var isValidBST = function(root) {
-    // let result = true;
-    
     const dfs = (node, left, right) => {
         if (!node) return true;
-        if (!(node.val > left && node.val < right)) {
+        if ((node.val <= left || node.val >= right)) {
             return false;
         }
         return dfs(node.left, left, node.val) && dfs(node.right, node.val, right);
     }
     
     return dfs(root, -Infinity, Infinity);
-    
-    // return result;
 };
