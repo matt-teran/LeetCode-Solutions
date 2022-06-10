@@ -17,8 +17,6 @@ var goodNodes = function(root) {
     // let max = root.val;
     
     const dfs = (node, max) => {
-        if (!node) return;
-        
         if (node.val >= max) {
             max = node.val;
             result++;
