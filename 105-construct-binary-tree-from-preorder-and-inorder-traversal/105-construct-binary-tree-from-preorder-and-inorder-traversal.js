@@ -12,9 +12,7 @@
  * @return {TreeNode}
  */
 var buildTree = function(preorder, inorder) {
-    if (!preorder.length || !inorder.length) {
-        return null;
-    }
+    if (!preorder.length || !inorder.length) return null;
     
     let root = new TreeNode(preorder[0]);
     let mid = inorder.indexOf(preorder[0]);
