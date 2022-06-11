@@ -14,18 +14,18 @@ var numIslands = function(grid) {
         
         while (q.length) {
             let directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-            let [r, c] = q.shift();
+            let [row, col] = q.shift();
             
-            for (let dir of directions) {
-                let cr = r + dir[0]
-                let cc = c + dir[1];
+            for (let [dr, dc] of directions) {
+                let r = row + dr;
+                let c = col + dc;
                 
-                if (0 <= cr && cr < rows &&
-                    0 <= cc && cc < cols &&
-                    grid[cr][cc] === '1' &&
-                    !visited.has(JSON.stringify([cr, cc]))) {
-                    q.push([cr, cc]);
-                    visited.add(JSON.stringify([cr, cc]));
+                if (0 <= r && r < rows &&
+                    0 <= c && c < cols &&
+                    grid[r][c] === '1' &&
+                    !visited.has(JSON.stringify([r, c]))) {
+                    q.push([r, c]);
+                    visited.add(JSON.stringify([r, c]));
                 }
             }
         }
@@ -39,6 +39,5 @@ var numIslands = function(grid) {
             }
         }
     }
-    console.log(visited)
     return islands;
 };
