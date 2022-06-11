@@ -26,7 +26,7 @@ var maxPathSum = function(root) {
         
         result = Math.max(result, root.val + leftMax + rightMax);
         
-        return Math.max(root.val + leftMax, root.val + rightMax);
+        return root.val + Math.max(leftMax, rightMax);
     }
     
     dfs(root);
