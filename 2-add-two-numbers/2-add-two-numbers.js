@@ -11,54 +11,22 @@
  * @return {ListNode}
  */
 var addTwoNumbers = function(l1, l2) {
-    let dummy = new ListNode();
+    const dummy = new ListNode();
     let node = dummy;
-    let n1 = l1;
-    let n2 = l2;
-    let carry = false;
-    while (n1 && n2) {
-        let sum = n1.val + n2.val
-        if (carry) sum++;
-        if (sum > 9) {
-            node.next = new ListNode(sum - 10);
-            carry = true;
-        } else {
-            node.next = new ListNode(sum);
-            carry = false;
-        }
-        
+    let carry = 0;
+    while(l1 || l2 || carry) {
+        let v1 = l1 ? l1.val : 0;
+        let v2 = l2 ? l2.val : 0;
+
+        let val = v1 + v2 + carry;
+        carry = Math.floor(val / 10);
+        val = val % 10;
+        node.next = new ListNode(val);
+
         node = node.next;
-        n1 = n1.next;
-        n2 = n2.next;
+        l1 = l1 ? l1.next : null;
+        l2 = l2 ? l2.next : null;
     }
-    while (n1) {
-        let sum = n1.val;
-        if (carry) sum++;
-        if (sum > 9) {
-            node.next = new ListNode(sum - 10);
-            carry = true;
-        } else {
-            node.next = new ListNode(sum);
-            carry = false;
-        }
-        n1 = n1.next;
-        node = node.next;
-    }
-    while (n2) {
-        let sum = n2.val;
-        if (carry) sum++;
-        if (sum > 9) {
-            node.next = new ListNode(sum - 10);
-            carry = true;
-        } else {
-            node.next = new ListNode(sum);
-            carry = false;
-        }
-        n2 = n2.next;
-        node = node.next;
-    }
-    
-    if (carry) node.next= new ListNode(1)
     
     return dummy.next;
 };
