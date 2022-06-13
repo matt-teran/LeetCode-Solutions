@@ -11,8 +11,7 @@ var WordDictionary = function() {
  * @param {string} word
  * @return {void}
  */
-WordDictionary.prototype.addWord = function(word) {
-    let node = this.root;
+WordDictionary.prototype.addWord = function(word, node=this.root) {
     for (let char of word) {
         node = node.children[char] = node.children[char] || new Node();
     }
