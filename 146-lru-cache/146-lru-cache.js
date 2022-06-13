@@ -52,14 +52,12 @@ LRUCache.prototype.get = function(key) {
 LRUCache.prototype.put = function(key, value) {
     if (this.cache.has(key)) {
         this.remove(this.cache.get(key));
+    } else if (this.cache.size === this.maxSize) {
+        this.cache.delete(this.remove(this.l.next).key);
     }
     
     this.cache.set(key, new Node(key, value));
     this.insert(this.cache.get(key));
-    
-    if (this.cache.size > this.maxSize) {
-        this.cache.delete(this.remove(this.l.next).key);
-    } 
 };
 
 /** 
