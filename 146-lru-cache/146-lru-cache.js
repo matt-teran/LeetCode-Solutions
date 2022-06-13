@@ -1,5 +1,5 @@
 var Node = function(key, val) {
-    this.key = key
+    this.key = key;
     this.val = val;
     
     this.next = null;
@@ -10,25 +10,21 @@ var Node = function(key, val) {
  * @param {number} capacity
  */
 var LRUCache = function(capacity) {
-    this.maxSize = capacity;
+    this.cap = capacity;
     this.cache = new Map();
     this.l = new Node();
     this.r = new Node();
-    this.l.next = this.r;
-    this.r.prev = this.l;
+    [this.l.next, this.r.prev] = [this.r, this.l];
 };
 
 LRUCache.prototype.remove = function(node) {
-    node.prev.next = node.next;
-    node.next.prev = node.prev;
+    [node.prev.next, node.next.prev] = [node.next, node.prev];
     return node;
 }
 
 LRUCache.prototype.insert = function(node) {
-    node.prev = this.r.prev;
-    node.next = this.r;
-    this.r.prev.next = node;
-    this.r.prev = node;
+    [node.prev, node.next] = [this.r.prev, this.r];
+    [this.r.prev.next, this.r.prev] = [node, node];
     return node;
 }
 
@@ -38,10 +34,8 @@ LRUCache.prototype.insert = function(node) {
  */
 LRUCache.prototype.get = function(key) {
     if (!this.cache.has(key)) return -1;
-
-    this.remove(this.cache.get(key));
-    this.insert(this.cache.get(key));
-    return this.cache.get(key).val;
+    return this.insert(this.remove(this.cache.get(key))).val;
+    
 };
 
 /** 
@@ -52,7 +46,7 @@ LRUCache.prototype.get = function(key) {
 LRUCache.prototype.put = function(key, value) {
     if (this.cache.has(key)) {
         this.remove(this.cache.get(key));
-    } else if (this.cache.size === this.maxSize) {
+    } else if (this.cache.size === this.cap) {
         this.cache.delete(this.remove(this.l.next).key);
     }
     
