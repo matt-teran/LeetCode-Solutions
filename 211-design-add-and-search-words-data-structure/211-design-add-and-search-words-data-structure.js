@@ -14,12 +14,7 @@ var WordDictionary = function() {
 WordDictionary.prototype.addWord = function(word) {
     let node = this.root;
     for (let char of word) {
-        // if (char in node.children) {
-        //     node = node.children[char];
-        // } else {
-            node.children[char] = node.children[char] || new Node();
-            node = node.children[char];
-        // }
+        node = node.children[char] = node.children[char] || new Node();
     }
     node.endOfWord = true;
 };
