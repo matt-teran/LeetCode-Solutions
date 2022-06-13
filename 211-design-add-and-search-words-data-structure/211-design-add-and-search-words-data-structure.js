@@ -37,11 +37,8 @@ WordDictionary.prototype.search = function(word, start=0, node=this.root) {
             }
             return false;
         } else {
-            if (word[i] in node.children) {
-                node = node.children[word[i]];
-            } else {
-                return false;
-            }    
+            if (!(word[i] in node.children)) return false;
+            node = node.children[word[i]];
         }
     }
     return node.endOfWord;
