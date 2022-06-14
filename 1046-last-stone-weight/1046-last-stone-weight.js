@@ -7,7 +7,10 @@ var lastStoneWeight = function(stones) {
     for (let stone of stones) heap.enqueue(stone);
     
     while (heap.size() > 1) {
-        heap.enqueue(heap.dequeue().element - heap.dequeue().element);
+        const x = heap.dequeue().element;
+        const y = heap.dequeue().element;
+        if (x !== y) heap.enqueue(x-y)
     }
+    heap.enqueue(0);
     return heap.front().element;
 };
