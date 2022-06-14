@@ -4,9 +4,8 @@
  * @return {boolean}
  */
 var queryString = function(s, n) {
-    while (n) {
+    for (;n;n--) {
         if (!s.includes(n.toString(2))) return false;
-        n--;
     }
     return true;
 };
