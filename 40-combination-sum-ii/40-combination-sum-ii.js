@@ -6,7 +6,7 @@
 var combinationSum2 = function(candidates, target) {
     const result = [];
     candidates.sort((a, b) => a - b);
-    console.log(candidates);
+
     const dfs = (i, combo, sum) => {
         if (sum === target) return result.push([...combo]);
         if (i === candidates.length) {
