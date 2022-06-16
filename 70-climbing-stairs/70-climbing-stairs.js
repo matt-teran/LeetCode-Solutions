@@ -3,10 +3,11 @@
  * @return {number}
  */
 var climbStairs = function(n) {
-    let one = 1, two = 1;
+    let [f1, f2] = [0, 1];
     
-    for (let i = 1; i < n; i++) {
-        [one, two] = [one + two, one];
+    while (n > -1) {
+        [f1, f2] = [f1 + f2, f1];
+        n--;
     }
-    return one;
+    return f1;
 };
