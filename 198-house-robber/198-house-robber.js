@@ -5,18 +5,16 @@
 
 // take the max value of current profit, plus the ith house or i + 1th house
 var rob = function(nums) {
-    const memo = {};
+    if (!nums.length) return 0;
+    // DP table
+    let maxes = new Array(nums.length + 1).fill(null);
+    // base case initialization
+    // nums[nums.length] = 0, maxes[nums.length - 1] = nums[nums.length - 1];
+    nums.push(0);
     
-    const robFrom = function(i) {
-        if (i >= nums.length) return 0;
-        
-        if (i in memo) return memo[i];
-        
-        let res = Math.max(robFrom(i + 1), robFrom(i + 2) + nums[i]);
-        
-        memo[i] = res;
-        return res;
+    // DP table calculations
+    for (let i = nums.length - 3; i > -1; i--){
+        nums[i] = Math.max(nums[i+1], nums[i+2] + nums[i]);
     }
-    
-    return robFrom(0);
+    return nums[0];
 };
