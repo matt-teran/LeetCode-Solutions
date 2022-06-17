@@ -5,10 +5,9 @@
 var rob = function(nums) {
     if (!nums.length) return 0;
     if (nums.length === 1) return nums[0];
-    let nums2 = [...nums];
+    let nums2 = nums.slice(1);
     nums.pop();
     nums.push(0);
-    nums2.shift();
     nums2.push(0);
     
     // DP table calculations
