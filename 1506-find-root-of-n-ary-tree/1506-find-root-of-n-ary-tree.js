@@ -12,20 +12,10 @@
  */
 var findRoot = function(tree) {
     if (tree.length === 1) return tree[0]
-    let hash = {}
-    for (let i = 0; i < tree.length; i++) hash[tree[i].val] = i;
-
+    let sum = 0;
     for (let node of tree) {
-        
-        if (node.children.length === 0) {
-            delete hash[node.val];
-        } else {
-            for (let child of node.children) {
-                delete hash[child.val];
-            }
-        }
+        sum += node.val;
+        for (let child of node.children) sum -= child.val
     }
-    // console.log(hash)
-    for (let key in hash) return tree[hash[key]];
-    // return false;
+    for (let node of tree) if (node.val === sum) return node;
 };
