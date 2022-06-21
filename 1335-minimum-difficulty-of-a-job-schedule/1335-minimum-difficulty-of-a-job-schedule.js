@@ -7,37 +7,33 @@ var minDifficulty = function(jobDifficulty, d) {
     let n = jobDifficulty.length;
     if (n < d) return -1;
     
-    let hardestJobRemaining = new Array(n).fill(0);
-    let hardestJob = 0;
-    
-    for (let i = n - 1; i >= 0; i--) {
-        hardestJob = Math.max(hardestJob, jobDifficulty[i]);
-        hardestJobRemaining[i] = hardestJob;
+    const dp = [];
+    for (let i = 0; i <= n; i++) {
+        dp.push(new Array(d + 1).fill(Infinity))
     }
     
-    const memo = {};
+    // Set base cases
+    dp[n - 1][d] = jobDifficulty[n - 1];
     
-    const dp = (i, day) => {
-        if (day === d) return hardestJobRemaining[i];
-        
-        if ( !(i in memo) ) memo[i] = {};
-        
-        if ( !(day in memo[i]) ) {
-            let best = Infinity;
+    // On the last day, we must schedule all remaining jobs, so dp[i][d]
+    // is the maximum difficulty job remaining
+    for (let i = n - 2; i >= 0; i--) {
+        dp[i][d] = Math.max(dp[i + 1][d], jobDifficulty[i]);
+    }
+    
+    for (let day = d - 1; day > 0; day--) {
+        for (let i = day - 1; i < n - (d - day); i++) {
             let hardest = 0;
             // Iterate through the options and choose the best
             for (let j = i; j < n - (d - day); j++) {
                 hardest = Math.max(hardest, jobDifficulty[j]);
                 // Recurrence relation
-                best = Math.min(best, hardest + dp(j + 1, day + 1));
+                dp[i][day] = Math.min(dp[i][day], hardest + dp[j + 1][day + 1]);
             }
-            memo[i][day] = best;
         }
-        
-        return memo[i][day];
-    }    
+    }
     
-    return dp(0, 1);
+    return dp[0][1];
 };
 
 // base case
