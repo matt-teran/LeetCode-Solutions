@@ -19,10 +19,7 @@
  * @return {void}
  */
 var printLinkedListInReverse = function(head) {
-    let nodes = [];
-    while (head) {
-        nodes.unshift(head);
-        head = head.getNext();
-    }
-    for (let node of nodes) node.printValue();
+    if (head === null) return;
+    printLinkedListInReverse(head.getNext());
+    head.printValue();
 };
