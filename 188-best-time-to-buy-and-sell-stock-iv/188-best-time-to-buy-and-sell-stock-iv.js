@@ -4,28 +4,32 @@
  * @return {number}
  */
 var maxProfit = (k, prices) => {
-	const memo = {};
-	const dp = (i, transactionsRemaining, holding) => {
-		// Base case
-		if (transactionsRemaining === 0 || i === prices.length) return 0;
- 
-		if ( !(i in memo) ) memo[i] = {};
-		if ( !(transactionsRemaining in memo[i]) ) memo[i][transactionsRemaining] = {};
-		if ( !(holding in memo[i][transactionsRemaining]) ) {
-			let doNothing = dp(i + 1, transactionsRemaining, holding);
-			let doSomething = 0;
- 
-		if (holding) {
-				// Sell stock
-				doSomething = prices[i] + dp(i + 1, transactionsRemaining - 1, 0);
-		} else {
-				// Buy stock
-				doSomething = -prices[i] + dp(i + 1, transactionsRemaining, 1);
-		}
-		// Recurrence relation
-			memo[i][transactionsRemaining][holding] = Math.max(doNothing, doSomething);
-		}
-		return memo[i][transactionsRemaining][holding];
-	}
-	return dp(0, k, 0);
+    const n = prices.length;
+    const dp = [];
+    for (let i = 0; i <= n; i++) {
+        dp[i] = [];
+        for (let j = 0; j <= k; j++) {
+            dp[i][j] = new Array(2).fill(0);
+        }
+    }
+	for (let i = n - 1; i >= 0; i--) {
+        for (let transactionsRemaining = 1; transactionsRemaining <= k; transactionsRemaining++) {
+            for (let holding = 0; holding < 2; holding++) {
+                let doNothing = dp[i + 1][transactionsRemaining][holding];
+                let doSomething;
+                if (holding == 1) {
+                    // Sell stock
+                    doSomething = prices[i] + dp[i + 1][transactionsRemaining - 1][0];
+                } else {
+                    // Buy stock
+                    doSomething = -prices[i] + dp[i + 1][transactionsRemaining][1];
+                }
+
+                // Recurrence relation
+                dp[i][transactionsRemaining][holding] = Math.max(doNothing, doSomething);
+            }
+        }
+    }
+
+    return dp[0][k][0];
 }
