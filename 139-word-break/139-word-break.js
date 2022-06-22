@@ -16,20 +16,25 @@
         
 //         return dp[-1]
 var wordBreak = function(s, wordDict) {
-    const dp = [];
-    for (let i = 0; i < s.length; i++) dp.push(false);
-    for (let i = 0; i < s.length; i++) {
-        for (let word of wordDict) {
-            if (i >= word.length - 1 && (i === word.length -1 || dp[i - word.length])) {
-                if (s.slice(i - word.length + 1, i + 1) === word) {
-                    dp[i] = true;
-                    break;
-                }
-            }
-        }
-    }
-    return dp.at(-1);
-};
+	const memo = [];
+	for (let i = 0; i < s.length; i++) memo.push(-1);
+	const dp = (i) => {
+		if (i < 0) return true;
+		if (memo[i] === -1)
+		for (let word of wordDict) {
+			if (i >= word.length - 1 && dp(i - word.length)) {
+			if (s.slice(i - word.length + 1, i + 1) === word) {
+					memo[i] = 1;
+					break;
+				}
+			}
+		}
+		if (memo[i] === -1) memo[i] = 0;
+		return memo[i] === 1;
+	}
+	return dp(s.length - 1);
+}
+
 
 // base case
 // s = cs => true
