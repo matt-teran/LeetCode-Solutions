@@ -3,5 +3,12 @@
  * @return {number}
  */
 var fib = function(n) {
-    return n < 2 ? n : fib(n-1) + fib(n-2);
+    const cache = {};
+    const calculate = (n) => {
+        if (n < 2) return n;
+        if (n in cache) return cache[n];
+        cache[n] = calculate(n-1) + calculate(n-2);
+        return cache[n];
+    }
+    return calculate(n)
 };
