@@ -3,10 +3,34 @@
  * @return {boolean}
  */
 var canJump = function(nums) {
-    let goal = nums.length - 1;
+    const memo = {};
     
-    for (let i = nums.length - 1; i >= 0; i--){
-        if (i + nums[i] >= goal) goal = i;
+    const dp = (i) => {
+        if (i === nums.length - 1) return true;
+        
+        if (!memo.hasOwnProperty(i)) {
+            memo[i] = false;
+            for (let j = i+1; j <= i+nums[i]; j++) {
+                if (dp(j)) {
+                    memo[i] = true;
+                    return memo[i];
+                };
+            }
+        }
+        return memo[i];
     }
-    return goal === 0;
+    
+    return dp(0)
 };
+
+
+// base case
+// i === nums.length - 1
+
+// function
+// dp(0) => bool
+
+// rr
+
+// state variables
+// • index of nums
