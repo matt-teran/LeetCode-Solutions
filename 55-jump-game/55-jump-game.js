@@ -3,24 +3,20 @@
  * @return {boolean}
  */
 var canJump = function(nums) {
-    const memo = {};
+    if (nums.length === 1) return true;
+    const dp = new Array(nums.length).fill(false);
+    dp[nums.length - 1] = true;
     
-    const dp = (i) => {
-        if (i === nums.length - 1) return true;
-        
-        if (!memo.hasOwnProperty(i)) {
-            memo[i] = false;
-            for (let j = i+1; j <= i+nums[i]; j++) {
-                if (dp(j)) {
-                    memo[i] = true;
-                    return memo[i];
-                };
+    for (let i = nums.length - 2; i > -1; i--) {
+        for (let j = i+1; j <= i+nums[i]; j++) {
+            if (dp[j]) {
+                dp[i] = true;
+                break;
             }
         }
-        return memo[i];
     }
     
-    return dp(0)
+    return dp[0];
 };
 
 
