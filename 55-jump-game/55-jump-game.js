@@ -3,17 +3,18 @@
  * @return {boolean}
  */
 var canJump = function(nums) {
-    const dp = new Array(nums.length).fill(false);
-    dp[nums.length - 1] = true;
+    // const dp = new Array(nums.length).fill(false);
+    nums[nums.length - 1] = true;
     let latestTrueIndex = nums.length - 1;
+    
     for (let i = nums.length - 2; i > -1; i--) {
         if (i + nums[i] >= latestTrueIndex) {
-            dp[i] = true;
+            // nums[i] = true;
             latestTrueIndex = i;
         };
     }
-    console.log(dp)
-    return dp[0];
+
+    return latestTrueIndex === 0;
 };
 
 
