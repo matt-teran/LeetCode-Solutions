@@ -6,8 +6,7 @@ var reverseString = function(s) {
     const recurse = (i) => {
         if (i === s.length) return;
         recurse(i+1)
-        s.push(s[i]);
+        s.splice(s.length, 0, s.splice(i,1)[0]);
     }
     recurse(0);
-    s.splice(0, s.length/2);
 };
