@@ -8,28 +8,29 @@
 // output: integer
 // constraints: at least one pile | piles.length <= h | at least one banana
 // edge cases: na
+
 var minEatingSpeed = function(piles, h) {
     let l = 1;
     let r = Math.max(...piles);
-    let result = r;
     
-    while (l <= r) {
-        let k = Math.floor((l + r) / 2);
-        let hours = 0;
+    var check = (k) => {
+        let n = h;
         for (let pile of piles) {
-            hours += Math.ceil(pile / k)
+            n -= Math.ceil(pile/k);
         }
+        return n > -1;
+    }
+    // console.log(check(6));
+    while (l <= r) {
+        console.log(l,r);
+        let m = Math.floor((r - l) / 2) + l;
         
-        if (hours <= h) {
-            r = k - 1;
-            result = k;
+        if (check(m)) {
+            r = m - 1;
         } else {
-            l = k + 1;
+            l = m + 1;
         }
     }
-    return result;
+    
+    return l;
 };
-
-// [30,11,23,4,20]
-// [4, 11, 20, 23, 30] 5
-// 1,2,3,4,5,6,7,8
