@@ -3,32 +3,29 @@
  * @return {number}
  */
 var maxProfit = function(prices) {
-    const memo = {};
+    const n = prices.length;
     
-    const dp = (i, status) => {
-        if (i === prices.length) return 0;
-        
-        if ( !(i in memo) ) memo[i] = {};
-        
-        if ( !(status in memo[i]) ) {
+    const dp = [];
+    for (let i = 0; i <= n; i++) dp.push(new Array(3).fill(0));
+    
+    for (let i = n-1; i > -1; i--) {
+        for (let status = 0; status < 3; status++) {
             let doSomething;
             let doNothing;
-            if (status === -1) {
-                doNothing = dp(i+1, status);
-                doSomething = -prices[i] + dp(i+1, 1);
-            } else if (status === 0) {
-                doSomething = dp(i+1, -1);
-                doNothing = dp(i+1, -1);
+            if (status === 0) {
+                doNothing = dp[i+1][status];
+                doSomething = -prices[i] + dp[i+1][2];
+            } else if (status === 1) {
+                doSomething = dp[i+1][0];
+                doNothing = dp[i+1][0];
             } else {
-                doSomething = prices[i] + dp(i+1, 0);
-                doNothing = dp(i+1, status);
+                doSomething = prices[i] + dp[i+1][1];
+                doNothing = dp[i+1][status];
             }
-            memo[i][status] = Math.max(doSomething, doNothing)
+            dp[i][status] = Math.max(doSomething, doNothing);
         }
-        return memo[i][status];
     }
-    
-    return dp(0, -1);
+    return dp[0][0];
 };
 
 // function
