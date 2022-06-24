@@ -9,17 +9,7 @@ var Logger = function() {
  * @return {boolean}
  */
 Logger.prototype.shouldPrintMessage = function(timestamp, message) {
-    if (message in this.log) {
-        if (this.log[message] + 10 <= timestamp) {
-            this.log[message] = timestamp;
-            return true;
-        } else {
-            return false;
-        }
-    } else {
-        this.log[message] = timestamp;
-        return true;
-    }
+    return this.log?.[message] > timestamp ? false : !!(this.log[message] = timestamp + 10)
 };
 
 /** 
