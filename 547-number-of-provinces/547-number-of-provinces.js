@@ -9,9 +9,10 @@ var findCircleNum = function(isConnected) {
     const rank = Array(n).fill(1);
     
     const find = (x) => {
-        if (x === root[x]) return x;
-        root[x] = find(root[x]);
-        return root[x];
+        return x === root[x] ? x : root[x] = find(root[x]);
+        // if (x === root[x]) return x;
+        // root[x] = find(root[x]);
+        // return root[x];
     }
     
     const union = (x, y) => {
@@ -38,8 +39,8 @@ var findCircleNum = function(isConnected) {
         }
     }
     const provinceRoots = new Set();
-    for (let i = 0; i < n; i++) {
-        provinceRoots.add(find(i));
-    }
+    
+    for (let i = 0; i < n; i++) provinceRoots.add(find(i))
+    
     return provinceRoots.size;
 };
