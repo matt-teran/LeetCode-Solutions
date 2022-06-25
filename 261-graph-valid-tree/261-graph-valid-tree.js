@@ -14,7 +14,7 @@ var validTree = function(n, edges) {
     for (let i = 0; i < n; i++) root.push(i);
     const rank = Array(n - 1).fill(1);
     
-    const find = x => x === root[x] ? x : find(root[x]);
+    const find = x => x === root[x] ? x : root[x] = find(root[x]);
     
     const union = (x, y) => {
         let rootX = find(x);
@@ -32,12 +32,11 @@ var validTree = function(n, edges) {
         }
     }
     
-    for (let [x, y] of edges) {
-        union(x, y);
-    }
-    const componentRoots = new Set();
-    for (let i = 0; i < n; i++) {
-        componentRoots.add(find(i));
-    }
-    return componentRoots.size === 1;
+    for (let [x, y] of edges) union(x, y);
+    
+    let prevComponentRoot = find(0);
+    
+    for (let i = 1; i < n; i++) if (prevComponentRoot !== find(i)) return false;
+    
+    return true;
 };
