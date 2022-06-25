@@ -4,30 +4,28 @@
  * @return {boolean}
  */
 var validTree = function(n, edges) {
-    if (n === 0) return true;
-    let visited = new Set();
     const adj = {};
-    for (let i = 0; i < n; i++) {
-        adj[i] = [];
+    const parent = new Map();
+    parent.set(0, -1);
+    for (let i = 0; i < n; i++) adj[i] = [];
+    for (let [x, y] of edges) {
+        adj[x].push(y);
+        adj[y].push(x);
     }
-    for (let [n1, n2] of edges) {
-        adj[n1].push(n2);
-        adj[n2].push(n1);
-    }
-    
-    const dfs = (n, prev) => {
-        if (visited.has(n)) {
-            return false;
-        }
-        visited.add(n);
+
+    let stack = [0];
+    while (stack.length) {
+        let node = stack.pop();
         
-        for (let i of adj[n]) {
-            if (i === prev) {
-                continue;
-            }
-            if (!dfs(i, n)) return false;
+        for (let neighbor of adj[node]) {
+            if (parent.get(node) === neighbor) continue;
+            
+            if (parent.has(neighbor)) return false;
+            
+            stack.push(neighbor);
+            parent.set(neighbor, node);
         }
-        return true;
     }
-    return dfs(0, -1) && n === visited.size;
+
+    return parent.size === n;
 };
