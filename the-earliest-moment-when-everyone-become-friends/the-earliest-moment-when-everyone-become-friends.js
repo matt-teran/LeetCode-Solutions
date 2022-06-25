@@ -13,7 +13,7 @@ var earliestAcq = function(logs, n) {
         let rootX = find(x);
         let rootY = find(y);
         
-        if (rootX === rootY) return;
+        if (rootX === rootY) return true;
         if (rank[rootX] > rank[rootY]) {
             root[rootY] = rootX;
         } else if (rank[rootX] < rank[rootY]) {
@@ -25,12 +25,13 @@ var earliestAcq = function(logs, n) {
     }
     
     for (let [timestamp, x, y] of logs) {
-        union(x, y);
-        let friendGroups = new Set();
-        for (let i = 0; i < n; i++) {
-            friendGroups.add(find(i));
-        }
-        if (friendGroups.size === 1) return timestamp;
+        if (!union(x, y)) n--;
+        if (n === 1) return timestamp
+        // let friendGroups = new Set();
+        // for (let i = 0; i < n; i++) {
+        //     friendGroups.add(find(i));
+        // }
+        // if (friendGroups.size === 1) return timestamp;
     }
     return -1;
 };
