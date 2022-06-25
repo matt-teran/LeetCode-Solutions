@@ -20,7 +20,7 @@ var validTree = function(n, edges) {
         let rootX = find(x);
         let rootY = find(y);
         
-        if (rootX === rootY) return;
+        if (rootX === rootY) return true;
         
         if (rank[rootX] > rank[rootY]) {
             root[rootY] = rootX;
@@ -32,11 +32,11 @@ var validTree = function(n, edges) {
         }
     }
     
-    for (let [x, y] of edges) union(x, y);
+    for (let [x, y] of edges) if (union(x, y)) return false;
     
-    let prevComponentRoot = find(0);
+//     let prevComponentRoot = find(0);
     
-    for (let i = 1; i < n; i++) if (prevComponentRoot !== find(i)) return false;
+//     for (let i = 1; i < n; i++) if (prevComponentRoot !== find(i)) return false;
     
     return true;
 };
