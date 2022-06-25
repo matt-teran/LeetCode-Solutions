@@ -3,40 +3,41 @@
  * @param {number[][]} edges
  * @return {boolean}
  */
+
+// Check if graph contains n - 1 edges AND is fully connected
 var validTree = function(n, edges) {
-    console.log(n -1, edges.length)
+    // If the graph does not contain n - 1 edges, it is NOT a valid tree
     if (edges.length !== n - 1) return false;
     
-    // Create Adjacency List
-    const adj = {};
-    for (let i = 0; i < n; i++) adj[i] = []; 
-    for (let [x, y] of edges) {
-        adj[x].push(y);
-        adj[y].push(x);
-    }
+    // check if single component
+    const root = [];
+    for (let i = 0; i < n; i++) root.push(i);
+    const rank = Array(n - 1).fill(1);
     
-    // Create 'seen' map
-    // const seen = new Map();
-    // seen.set(0, -1);
-    const seen = new Set([0]);
-
-    // Perform Iterative DFS
-    let stack = [0];
-    while (stack.length) {
-        let node = stack.pop();
+    const find = x => x === root[x] ? x : find(root[x]);
+    
+    const union = (x, y) => {
+        let rootX = find(x);
+        let rootY = find(y);
         
-        for (let neighbor of adj[node]) {
-            // Check if target neighbor has already been seen
-            if (seen.has(neighbor)) continue;
-            
-            // If target node has been seen, return false
-            // if (seen.has(neighbor)) return false;
-            
-            // Continue DFS, Add reverse relationship to seen
-            stack.push(neighbor);
-            seen.add(neighbor);
+        if (rootX === rootY) return;
+        
+        if (rank[rootX] > rank[rootY]) {
+            root[rootY] = rootX;
+        } else if (rank[rootX] < rank[rootY]) {
+            root[rootX] = rootY;
+        } else {
+            root[rootY] = rootX;
+            rank[rootX]++;
         }
     }
-
-    return seen.size === n;
+    
+    for (let [x, y] of edges) {
+        union(x, y);
+    }
+    const componentRoots = new Set();
+    for (let i = 0; i < n; i++) {
+        componentRoots.add(find(i));
+    }
+    return componentRoots.size === 1;
 };
