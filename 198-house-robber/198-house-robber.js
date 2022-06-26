@@ -1,35 +1,18 @@
-/**
- * @param {number[]} nums
- * @return {number}
- */
-const memo = {};
-//function
 var rob = function(nums) {
-    // recurrence relation
-    
-    const dp = Array(nums.length + 1);
-    
-    // base case
-    // if (i === 0) return nums[0];
-    // if (i === 1) return Math.max(nums[0], nums[1]);
-    // recurrence relation
-    // if ( !(i in memo) ) memo[i] = Math.max(dp(i - 1), dp(i - 2) + nums[i]);
-    
-    for (let i = 0; i < dp.length; i++) {
-        if (i === 0) {
-            dp[i] = nums[0]
-        } else if (i === 1) {
-            dp[i] = Math.max(nums[0], nums[1])
-        } else {
-            dp[i] = Math.max(dp[i-1], dp[i-2] + nums[i]);
+	const memo = {};
+	const dp = (i, prev) => {
+		if (i < 0) return 0;
+        if (!memo.hasOwnProperty(i)) {
+            memo[i] = Math.max(dp(i-1), nums[i] + dp(i-2));
         }
-    }
-        
-    return dp[nums.length - 1];
-};
-
-// [2,7,9,3,1]
-// [2,7,9,3]
-// [2,7,9]
-// [2,7]
-// [2]
+        return memo[i];
+		// if ( !(i in memo) ) memo[i] = {};
+		// if ( !(prev in memo[i]) ) {
+		// 	memo[i][prev] = dp(i - 1, false);
+		// 	if (!prev) memo[i][prev] = Math.max(memo[i][prev], dp(i - 1, true) + nums[i]);
+		// }
+		// return memo[i][prev];
+	}
+		
+	return dp(nums.length - 1);
+}
