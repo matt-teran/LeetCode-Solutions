@@ -3,19 +3,11 @@
  * @param {number} k
  * @return {number[][]}
  */
-var getDist = function(point) {
-    return {
-        dist: Math.sqrt((point[0] ** 2) + (Math.abs(point[1]) ** 2)),
-        point: point
-    };
-}
+var dist = (a,b=[0,0]) => Math.sqrt((a[0]-b[0])**2+(a[1]-b[1])**2);
 
 var kClosest = function(points, k) {
-    let heap = new MinPriorityQueue({compare: (p1, p2) => p1.dist < p2.dist});
-
-    for (let point of points) heap.enqueue(getDist(point));
-    
-    while (heap.size() > k) heap.dequeue();
-    
-    return heap.toArray().map(p => p.point);
+    const heap = new MaxPriorityQueue({compare: (a,b)=>a[1]<b[1]});
+    for (let point of points) heap.enqueue([point,dist(point)]);
+    while(heap.size()>k)heap.dequeue();
+    return heap.toArray().map(i=>i[0]);
 };
