@@ -4,35 +4,31 @@
  * @return {boolean}
  */
 var exist = function(board, word) {
-    const rows = board.length;
-    const cols = board[0].length;
-    const directions = [[1, 0], [-1, 0], [0, 1], [0, -1]];
-    let visited = new Set();
+    const ROWS = board.length;
+    const COLS = board[0].length;
     
-    const find = (row, col, i) => {
+    // const visited = new Set();
+    
+    const dfs = (r, c, i, visited) => {
         if (i === word.length) return true;
-        if (row < 0 || col < 0 ||
-           row >= rows || col >= cols ||
-            visited.has(`r${row}c${col}`) ||
-           board[row][col] !== word[i]) {
-            return false;
-        }
-        
-        visited.add(`r${row}c${col}`);
-        let result = (find(row+1, col, i + 1) ||
-                     find(row-1, col, i + 1) ||
-                     find(row, col+1, i + 1) ||
-                     find(row, col-1, i + 1))
-        visited.delete(`r${row}c${col}`);
-        return result;
+        if (r < 0 || r >= ROWS ||
+           c < 0 || c >= COLS ||
+            visited.has(`r${r}c${c}`) ||
+           board[r][c] !== word[i]) return false;
+        visited.add(`r${r}c${c}`)
+        // console.log(visited);
+        const ans = (i+1 === word.length || dfs(r+1,c,i+1,visited) || dfs(r-1,c,i+1,visited) ||
+           dfs(r,c+1,i+1,visited) || dfs(r,c-1,i+1,visited))
+        visited.delete(`r${r}c${c}`);
+        return ans;
     }
     
-    for (let r = 0; r < board.length; r++) {
-        for (let c = 0; c < board[r].length; c++) {
-            if (board[r][c] === word[0]) {
-                if (find(r, c, 0, new Set())) return true;
-            }
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            // visited.clear();
+            if (board[r][c] === word[0] && dfs(r, c, 0, new Set())) return true;
         }
     }
+    
     return false;
 };
