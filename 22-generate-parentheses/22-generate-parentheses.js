@@ -4,24 +4,16 @@
  */
 var generateParenthesis = function(n) {
     const result = [];
-    const stack = []
-    
-    const backtrack = (openN, closeN) => {
-        if (openN === closeN && n === openN) {
-            result.push(stack.join(''));
-            return;
-        }
-        if (openN < n) {
-            stack.push('(');
-            backtrack(openN + 1, closeN)
-            stack.pop();
-        }
-        if (closeN < openN) {
-            stack.push(')');
-            backtrack(openN, closeN + 1);
-            stack.pop();
-        }
+    const backtrack = (combo,l,r) => {
+        // push complete solution
+        if (combo.length === n * 2) return result.push(combo);
+        
+        // only explore candidate if valid
+        l < n && backtrack(combo+'(',l+1,r)
+        r < l && backtrack(combo+')',l,r+1);
     }
-    backtrack(0, 0);
+    
+    backtrack('',0,0);
+    
     return result;
 };
