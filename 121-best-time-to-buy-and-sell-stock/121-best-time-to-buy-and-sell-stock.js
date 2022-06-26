@@ -5,15 +5,11 @@
 var maxProfit = function(prices) {
     let maxProfit = 0;
     let l = 0;
-    let r = 1;
-    while (r < prices.length) {
-        if (prices[l] < prices[r]) {
-            let profit = prices[r] - prices[l];
-            maxProfit = Math.max(profit, maxProfit);
-        } else {
+    for (let r = 0; r < prices.length; r++) {
+        if (0 > prices[r] - prices[l]) {
             l = r;
         }
-        r++;
+        maxProfit = Math.max(maxProfit, prices[r] - prices[l]);
     }
     return maxProfit;
 };
