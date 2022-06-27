@@ -19,6 +19,8 @@ var searchMatrix = function(matrix, target) {
         }
         return false;
     }
-    for (let col of matrix) if (search(col)) return true;
+    for (let col of matrix) {
+        if (col[0] <= target && col.at(-1) >= target && search(col)) return true;
+    }
     return false;
 };
