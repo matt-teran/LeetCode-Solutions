@@ -13,11 +13,10 @@
  * @return {string}
  */
 var getDirections = function(root, startValue, destValue) {
-    const memo = {};
-    const shortDfs = (node) => {
+    const startDfs = (node) => {
         if (!node) return -Infinity;
         if (node.val === startValue) return 0;
-        return 1 + Math.max(shortDfs(node.left), shortDfs(node.right));
+        return 1 + Math.max(startDfs(node.left), startDfs(node.right));
     }
     
     const destDfs = (node) => {
@@ -50,7 +49,7 @@ var getDirections = function(root, startValue, destValue) {
             }
         }
         if (!con) {
-            return 'U'.repeat(shortDfs(smallestAncestor)).concat(destDfs(smallestAncestor));
+            return 'U'.repeat(startDfs(smallestAncestor)).concat(destDfs(smallestAncestor));
         };
     }
 };
