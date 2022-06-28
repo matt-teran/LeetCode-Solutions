@@ -13,26 +13,26 @@ var validPath = function(n, edges, source, destination) {
         adj[v].push(u);
     }
     const visited = new Set();
-    const stack = [source];
-    while (stack.length) {
-        let vertex = stack.pop();
+    // const stack = [source];
+    // while (stack.length) {
+    //     let vertex = stack.pop();
+    //     if (vertex === destination) return true;
+    //     if (visited.has(vertex)) ;
+    //     visited.add(vertex);
+    //     for (let v of adj[vertex]) {
+    //         if (!visited.has(v)) stack.push(v);
+    //     }
+    // }
+    // return false;
+    const dfs = (vertex) => {
         if (vertex === destination) return true;
-        if (visited.has(vertex)) ;
+        if (visited.has(vertex)) return false;
         visited.add(vertex);
         for (let v of adj[vertex]) {
-            if (!visited.has(v)) stack.push(v);
+            if (dfs(v)) return true;
         }
+        return false;
     }
-    return false;
-//     const dfs = (vertex, visited) => {
-//         if (vertex === destination) return true;
-//         if (visited.has(vertex)) return false;
-//         visited.add(vertex);
-//         for (let v of adj[vertex]) {
-//             if (dfs(v, visited)) return true;
-//         }
-//         return false;
-//     }
     
-//     return dfs(source, new Set());
+    return dfs(source);
 };
