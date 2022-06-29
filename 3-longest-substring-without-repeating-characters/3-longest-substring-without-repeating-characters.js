@@ -3,22 +3,16 @@
  * @return {number}
  */
 var lengthOfLongestSubstring = function(s) {
-    let count = {}
-    
-    const isDup = () => {
-        for (let char of Object.values(count)) if (char > 1) return true;
-    }
-    
+    let seen = new Set();
     let result = 0;
     let l = 0;
     for (let r = 0; r < s.length; r++) {
-        count[s[r]] ? count[s[r]]++ : count[s[r]] = 1;
-        if(isDup()) {
-            count[s[l]]--;
-            l++
-        } else {
-            result++;
+        while (seen.has(s[r])) {
+            seen.delete(s[l]);
+            l++;
         }
+        seen.add(s[r]);
+        result = Math.max(result, r - l + 1);
     }
     return result;
 };
