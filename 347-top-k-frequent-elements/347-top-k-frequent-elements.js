@@ -5,11 +5,11 @@
  */
 var topKFrequent = function(nums, k) {
     const count = {};
-    const result = []
-    for (let num of nums) count[num] ? count[num]++ : count[num] = 1;
-    const utility = []
-    for (let [num, freq] of Object.entries(count)) utility.push([num, freq]);
+    for (let num of nums) {
+        count[num] ? count[num]++ : count[num] = 1;
+    }
+    const utility = Object.entries(count);
+    console.log(utility);
     utility.sort((a,b) => b[1] - a[1]);
-
-    return utility.map(([num, freq]) => num).slice(0, k);
+    return utility.map(el => Number(el[0])).slice(0,k);
 };
