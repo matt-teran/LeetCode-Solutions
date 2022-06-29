@@ -38,7 +38,7 @@ var findAllRecipes = function(recipes, ingredients, supplies) {
     
     for (let recipe of recipes) {
         if (dfs(recipe)) {
-            supply.add(recipe);
+            // supply.add(recipe);
             result.add(recipe);
         };
     }
