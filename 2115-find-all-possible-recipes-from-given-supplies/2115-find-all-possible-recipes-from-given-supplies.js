@@ -32,15 +32,12 @@ var findAllRecipes = function(recipes, ingredients, supplies) {
         }
 
         seen.delete(recipe);
-
+        supply.add(recipe);
         return true;
     }
     
     for (let recipe of recipes) {
-        if (dfs(recipe)) {
-            // supply.add(recipe);
-            result.add(recipe);
-        };
+        if (dfs(recipe)) result.add(recipe);
     }
     
     return [...result];
