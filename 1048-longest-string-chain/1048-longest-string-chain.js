@@ -5,13 +5,13 @@
 var longestStrChain = function(words) {
     const wordsPresent = new Set(words);
     const memo = {};
-    const dfs = (word) => {
+    const dp = (word) => {
         if (!(word in memo)) {
             let maxLength = 1;
             for (let i = 0; i < word.length; i++) {
                 const newWord = word.substring(0,i) + word.substring(i+1);
                 if (wordsPresent.has(newWord)) {
-                    let currentLength = 1 + dfs(newWord);
+                    let currentLength = 1 + dp(newWord);
                     maxLength = Math.max(maxLength, currentLength);
                 }
                 
@@ -21,20 +21,6 @@ var longestStrChain = function(words) {
         
         return memo[word];
     }
-    let result = 1;
-    for (const word of words) {
-        result = Math.max(dfs(word), result);
-    }
     
-    return result;
+    return Math.max(...words.map(word => dp(word)));
 };
-
-var validate = (a,b) => {
-    if (a.length + 1 !== b.length) return false;
-    let from = 0;
-    for (const char of a) {
-        if (b.indexOf(char, from) === -1) return false;
-        from = b.indexOf(char,from) + 1;
-    }
-    return true;
-}
