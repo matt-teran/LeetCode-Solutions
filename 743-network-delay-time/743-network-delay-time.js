@@ -5,26 +5,32 @@
  * @return {number}
  */
 var networkDelayTime = function(times, n, k) {
+    //visited set
     const visited = new Set();
-    const edges = {};
-    for (let [u, v, w] of times) edges[u] = [];
-    for (let [u, v, w] of times) edges[u].push([v, w]);
     
-    const djikstrasheap = new MinPriorityQueue({compare: (a, b) => a[0] > b[0]});
-    djikstrasheap.enqueue([0, k]);
+    // create adjacency list
+    const edges = {};
+    for (let [source, target, time] of times) edges[source] = [];
+    for (let [source, target, time] of times) edges[source].push([target, time]);
+    
+    // min heap
+    const heap = new MinPriorityQueue({compare: (a, b) => a[1] > b[1]});
+    heap.enqueue([k, 0]);
     let time = 0;
     
-    while (djikstrasheap.size()) {
-        // console.log(djikstrasheap.dequeue());
-        let [w1, n1] = djikstrasheap.dequeue();
+    // bfs
+    while (heap.size()) {
+        let dequeued = heap.dequeue();
+        let [n1, w1] = dequeued;
         
         if (visited.has(n1)) continue;
         visited.add(n1);
         
         time = Math.max(time, w1);
+        
         if (n1 in edges) {
             for (let [n2, w2] of edges[n1]) {
-                if (!visited.has(n2)) djikstrasheap.enqueue([w1 + w2, n2]);
+                if (!visited.has(n2)) heap.enqueue([n2, w1 + w2]);
             }
         }
     }
