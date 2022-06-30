@@ -3,8 +3,6 @@
  * @return {number}
  */
 var longestStrChain = function(words) {
-    words.sort((a,b) => a.length - b.length);
-    
     const wordsPresent = new Set(words);
     const memo = {};
     const dfs = (word) => {
