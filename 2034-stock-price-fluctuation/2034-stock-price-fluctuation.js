@@ -1,9 +1,9 @@
 
 var StockPrice = function() {
     this.feed = {};
-    this.latestTime = -Infinity;
+    this.latest = -Infinity;
     this.min = new MinPriorityQueue({compare: (a,b) => a[0] > b[0]});
-    this.max = new MaxPriorityQueue({compare: (a,b) => a[0] < b[0]});
+    this.max = new MaxPriorityQueue({compare: (a,b) => a[0] < b[0]})
 };
 
 /** 
@@ -12,42 +12,31 @@ var StockPrice = function() {
  * @return {void}
  */
 StockPrice.prototype.update = function(timestamp, price) {
-    // timestamp is greater than latest time
-    if (timestamp > this.latestTime) {
-        // update the latest time with our new latest time
-        this.latestTime = timestamp;
-        
-        // set up price in the feed hash
-        this.feed[this.latestTime] = price;
-        
-        // add this new price to both heaps
-        this.min.enqueue([price, timestamp]);
-        this.max.enqueue([price, timestamp]);
-        // timestamp needs updating
-    } else {
-        // update the price in our feed hash
+    if (timestamp > this.latest) {
+        this.latest = timestamp;
         this.feed[timestamp] = price;
-        // add the new price to both heaps
         this.min.enqueue([price,timestamp]);
         this.max.enqueue([price,timestamp]);
+        return;
     }
+    
+    this.feed[timestamp] = price;
+    this.min.enqueue([price,timestamp]);
+    this.max.enqueue([price,timestamp]);
 };
 
 /**
  * @return {number}
  */
 StockPrice.prototype.current = function() {
-    return this.feed[this.latestTime];
+    return this.feed[this.latest];
 };
 
 /**
  * @return {number}
  */
 StockPrice.prototype.maximum = function() {
-    // while the front of the queue is not 
-    while (this.feed[this.max.front()[1]] !== this.max.front()[0]) {
-        this.max.dequeue();
-    }
+    while (this.feed[this.max.front()[1]] !== this.max.front()[0]) this.max.dequeue();
     return this.max.front()[0];
 };
 
@@ -55,9 +44,7 @@ StockPrice.prototype.maximum = function() {
  * @return {number}
  */
 StockPrice.prototype.minimum = function() {
-    while (this.feed[this.min.front()[1]] !== this.min.front()[0]) {
-        this.min.dequeue();
-    }
+    while (this.feed[this.min.front()[1]] !== this.min.front()[0]) this.min.dequeue();
     return this.min.front()[0];
 };
 
