@@ -6,6 +6,7 @@
 var shortestPath = function(grid, k) {
     const ROWS = grid.length;
     const COLS = grid[0].length;
+    if (k >= ROWS + COLS - 2) return ROWS + COLS - 2;
     const DIR = [[1,0],[-1,0],[0,1],[0,-1]];
     const initialState = [0,0,k]
     const visited = new Set();
