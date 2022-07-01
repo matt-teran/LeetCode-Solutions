@@ -5,40 +5,32 @@
  * @return {string[]}
  */
 var findAllRecipes = function(recipes, ingredients, supplies) {
-    const n = recipes.length;
     const supply = new Set(supplies);
-    const seen = new Set();
-    const result = new Set();
     const adj = {};
-    for (let i = 0; i < n; i++) adj[recipes[i]] = ingredients[i];
-    for (let i = 0; i < n; i++) {
-        for (let ingredient of ingredients[i]) {
-            if (!(ingredient in adj)) adj[ingredient] = [];
-        }
+    for (let i = 0; i < recipes.length; i++) adj[recipes[i]] = ingredients[i];
+    for (let i = 0; i < ingredients.length; i++) {
+        for (const ingredient of ingredients[i]) if (!(ingredient in adj)) adj[ingredient] = [];
     }
+    const visited = new Set();
+    const result = new Set();
     
     const dfs = (recipe) => {
-        if (seen.has(recipe)) {
-            return false;
+        if (visited.has(recipe)) return false
+        if (adj[recipe].length === 0) return supply.has(recipe);
+        
+        visited.add(recipe);
+        for (const ingredient of adj[recipe]) {
+            if (!dfs(ingredient)) return false;
         }
-
-        if (adj[recipe].length === 0) {
-            return supply.has(recipe);
-        }
-
-        seen.add(recipe);
-        for (let i of adj[recipe]) {
-            if (!dfs(i)) return false;
-        }
-
-        seen.delete(recipe);
+        visited.delete(recipe);
+        
         supply.add(recipe);
         return true;
     }
     
-    for (let recipe of recipes) {
+    for (const recipe of recipes) {
         if (dfs(recipe)) result.add(recipe);
     }
     
-    return [...result];
+    return [...result]
 };
