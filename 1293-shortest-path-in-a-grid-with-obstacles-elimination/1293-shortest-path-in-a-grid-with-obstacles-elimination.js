@@ -7,32 +7,28 @@ var shortestPath = function(grid, k) {
     const ROWS = grid.length;
     const COLS = grid[0].length;
     const DIR = [[1,0],[-1,0],[0,1],[0,-1]];
-    const target = [ROWS-1,COLS-1];
+    const initialState = [0,0,k]
     const visited = new Set();
-    const q = [];
-    
-    let initialState = [0,0,k];
-    q.push([0, initialState]);
     visited.add(initialState.join('#'));
-    
+    const q = [[0,initialState]];
     while (q.length) {
-        let [steps, [row,col,remaining]] = q.shift();
+        const [steps, state] = q.shift();
+        const [row, col, remaining] = state;
+        if (row === ROWS-1 && COLS-1 === col) return steps;
         
-        if (row === target[0] && col === target[1]) return steps;
         
-        for (let [dr, dc] of DIR) {
-            let [r,c] = [row+dr,col+dc];
-            
+        for (const [dr,dc] of DIR) {
+            const [r,c] = [row+dr,col+dc];
             if (grid?.[r]?.[c] > -1) {
-                let newRemaining = remaining - grid[r][c];
-                let newState = [r,c,newRemaining];
-                if (newRemaining >= 0 && !visited.has(newState.join('#'))) {
-                    q.push([steps+1, newState]);
+                const newRemaining = remaining - grid[r][c];
+                const newState = [r,c,newRemaining];
+                if (newRemaining > -1 && 
+                    !visited.has(newState.join('#'))) {
                     visited.add(newState.join('#'));
+                    q.push([steps+1, newState]);
                 }
             }
         }
     }
-    
     return -1;
 };
