@@ -1,5 +1,6 @@
 
 var StockPrice = function() {
+    // intialize w/ feed hashmap, latest integer, and min and max heaps
     this.feed = {};
     this.latest = -Infinity;
     this.min = new MinPriorityQueue({compare: (a,b) => a[0] > b[0]});
@@ -12,14 +13,11 @@ var StockPrice = function() {
  * @return {void}
  */
 StockPrice.prototype.update = function(timestamp, price) {
-    if (timestamp > this.latest) {
-        this.latest = timestamp;
-        this.feed[timestamp] = price;
-        this.min.enqueue([price,timestamp]);
-        this.max.enqueue([price,timestamp]);
-        return;
-    }
+    // If timestamp is latest
+    // Update latest variable
+    // if (timestamp > this.latest) this.latest = timestamp; 
     
+    this.latest = Math.max(this.latest, timestamp);
     this.feed[timestamp] = price;
     this.min.enqueue([price,timestamp]);
     this.max.enqueue([price,timestamp]);
