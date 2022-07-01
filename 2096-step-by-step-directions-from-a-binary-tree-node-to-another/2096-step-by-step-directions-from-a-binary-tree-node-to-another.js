@@ -13,43 +13,44 @@
  * @return {string}
  */
 var getDirections = function(root, startValue, destValue) {
-    const startDfs = (node) => {
-        if (!node) return -Infinity;
-        if (node.val === startValue) return 0;
-        return 1 + Math.max(startDfs(node.left), startDfs(node.right));
-    }
-    
-    const destDfs = (node) => {
-        if (!node) return 'F';
-        if (node.val === destValue) return '';
-        
-        let right = 'R'.concat(destDfs(node.right));
-        return right.at(-1) !== 'F' ? right : 'L'.concat(destDfs(node.left));
-    }
+    let LCA = root;
     const dfs = (node, target) => {
         if (!node) return false;
         if (node.val === target) return true;
         
         return dfs(node.left, target) || dfs(node.right, target);
     }
-    
-    let smallestAncestor = root;
-    const q = [root];
-    while (q.length) {
-        let qLen = q.length;
-        let con = false;
-        for (let i = 0; i < qLen; i++) {
-            let node = q.shift();
-            if (node) {
-                q.push(node.left, node.right);
-                if (dfs(node, startValue) && dfs(node, destValue)) {
-                    smallestAncestor = node;
-                    con = true;
-                }
-            }
-        }
-        if (!con) {
-            return 'U'.repeat(startDfs(smallestAncestor)).concat(destDfs(smallestAncestor));
-        };
+    const findLCA = (node) => {
+        if (!node) return;
+        let start = dfs(node, startValue);
+        let dest = dfs(node, destValue);
+        if (start && dest) LCA = node;
+        
+        findLCA(node.left);
+        findLCA(node.right);
     }
+    
+    const findStart = (node, dir) => {
+        if (!node) return false;
+        if (node.val === startValue) return dir;
+        
+        return findStart(node.left, dir+'L') || findStart(node.right, dir+'R');
+    }
+    const findDest = (node, dir) => {
+        if (!node) return false;
+        if (node.val === destValue) return dir;
+        
+        return findDest(node.left, dir+'L') || findDest(node.right, dir+'R');
+    }
+    
+    // findLCA(root);
+    let startDirections = findStart(root, '');
+    let endDirections = findDest(root, '');
+
+    while (startDirections[0] === endDirections[0]) {
+        startDirections = startDirections.substring(1);
+        endDirections = endDirections.substring(1);
+    }
+
+    return 'U'.repeat(startDirections.length) + endDirections;
 };
