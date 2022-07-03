@@ -3,12 +3,23 @@
  * @return {number}
  */
 var maxPoints = function(points) {
+//     const currentRow = Array(points[0].length).fill(0);
+//     let prevRow = Array(points[0].length).fill(0);
+    
+//     for (const row of points) {
+//         let runMax = prevRow[0];
+//         for (let i = 0; i < row.length; i++) {
+//             runMax = Math.max(runMax - 1, prevRow[i]);
+//             currentMax[i] = runMax;
+//         }
+//     }
+    
     let currentRow = Array(points[0].length).fill(0);
     let previousRow = Array(points[0].length).fill(0);
 
     for (const row of points) {
-        let runMax = 0;
-        for (let i = 0; i < row.length; i++) {
+        let runMax = previousRow[0];
+        for (let i = 1; i < row.length; i++) {
             runMax = Math.max(runMax - 1, previousRow[i]);
             currentRow[i] = runMax;
         }
