@@ -13,44 +13,18 @@
  * @return {string}
  */
 var getDirections = function(root, startValue, destValue) {
-    let LCA = root;
-    const dfs = (node, target) => {
+    const getDir = (node, target, dir) => {
         if (!node) return false;
-        if (node.val === target) return true;
+        if (node.val === target) return dir;
         
-        return dfs(node.left, target) || dfs(node.right, target);
+        return getDir(node.left, target, dir+'L') || getDir(node.right, target, dir+'R');
     }
-    const findLCA = (node) => {
-        if (!node) return;
-        let start = dfs(node, startValue);
-        let dest = dfs(node, destValue);
-        if (start && dest) LCA = node;
-        
-        findLCA(node.left);
-        findLCA(node.right);
+    let startDir = getDir(root, startValue, '');
+    let destDir = getDir(root, destValue, '');
+    while (startDir[0] === destDir[0]) {
+        startDir = startDir.slice(1);
+        destDir = destDir.slice(1);
     }
     
-    const findStart = (node, dir) => {
-        if (!node) return false;
-        if (node.val === startValue) return dir;
-        
-        return findStart(node.left, dir+'L') || findStart(node.right, dir+'R');
-    }
-    const findDest = (node, dir) => {
-        if (!node) return false;
-        if (node.val === destValue) return dir;
-        
-        return findDest(node.left, dir+'L') || findDest(node.right, dir+'R');
-    }
-    
-    // findLCA(root);
-    let startDirections = findStart(root, '');
-    let endDirections = findDest(root, '');
-
-    while (startDirections[0] === endDirections[0]) {
-        startDirections = startDirections.substring(1);
-        endDirections = endDirections.substring(1);
-    }
-
-    return 'U'.repeat(startDirections.length) + endDirections;
+    return 'U'.repeat(startDir.length) + destDir;
 };
