@@ -17,21 +17,16 @@
  * @return {void}
  */
 var findSecretWord = function(wordlist, master) {
-    const hasEnoughChars = (word, wordToMatch, threshold) => {
-        let count = 0;
-        
-        for (let i = 0; i < word.length; i++) if (word[i] === wordToMatch[i]) count++;
-        
-        return threshold === count;
-    }
-    
-    while(true) {
+    const hasEnoughMatches = (word, guessed, threshold) => {
+        let matches = 0;
+        for (let i = 0; i < word.length; i++) if (word[i] === guessed[i]) matches++;
+        return matches === threshold;
+    };
+    while (true) {
         const randomIndex = Math.floor(Math.random() * wordlist.length);
         const guessed = wordlist.splice(randomIndex, 1)[0];
         const matches = master.guess(guessed);
         if (matches === 6) return guessed;
-        wordlist = wordlist.filter(word => hasEnoughChars(word, guessed, matches));
+        wordlist = wordlist.filter(word => hasEnoughMatches(word, guessed, matches));
     }
 };
-
-
