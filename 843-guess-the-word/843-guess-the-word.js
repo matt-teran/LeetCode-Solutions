@@ -26,11 +26,11 @@ var findSecretWord = function(wordlist, master) {
     }
     
     while(true) {
-        const i = Math.floor(Math.random() * wordlist.length);
-        let guessed = wordlist.splice(i, 1)[0];
-        const matched = master.guess(guessed);
-        if (matched === 6) return true;
-        wordlist = wordlist.filter(word => hasEnoughChars(word, guessed, matched));
+        const randomIndex = Math.floor(Math.random() * wordlist.length);
+        const guessed = wordlist.splice(randomIndex, 1)[0];
+        const matches = master.guess(guessed);
+        if (matches === 6) return guessed;
+        wordlist = wordlist.filter(word => hasEnoughChars(word, guessed, matches));
     }
 };
 
