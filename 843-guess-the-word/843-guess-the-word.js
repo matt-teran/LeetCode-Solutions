@@ -20,9 +20,7 @@ var findSecretWord = function(wordlist, master) {
     const hasEnoughChars = (word, wordToMatch, threshold) => {
         let count = 0;
         
-        for (let i = 0; i < word.length; i++) {
-            if (word[i] === wordToMatch[i]) count++;
-        }
+        for (let i = 0; i < word.length; i++) if (word[i] === wordToMatch[i]) count++;
         
         return threshold === count;
     }
@@ -33,7 +31,6 @@ var findSecretWord = function(wordlist, master) {
         const matched = master.guess(guessed);
         if (matched === 6) return true;
         wordlist = wordlist.filter(word => hasEnoughChars(word, guessed, matched));
-
     }
 };
 
