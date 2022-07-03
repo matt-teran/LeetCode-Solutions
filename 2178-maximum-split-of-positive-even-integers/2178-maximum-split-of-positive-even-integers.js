@@ -12,10 +12,10 @@ var maximumEvenSplit = function(finalSum) {
         result.push(i);
         i += 2;
     }
+    result[result.length - 1] += finalSum;
+    return result;
     
-    if (finalSum === 0) return result;
-    
-    if (finalSum - i < 0) result[result.length - 1] += finalSum;
+    if (finalSum - i < 0) 
     
     return result;
 };
