@@ -3,14 +3,14 @@
  * @return {number}
  */
 var evalRPN = function(tokens) {
+    const stack = [];
     const map = {
         '+': (a,b) => a + b,
         '-': (a,b) => a - b,
         '*': (a,b) => a * b,
         '/': (a,b) => a / b > 0 ? Math.floor(a/b) : Math.ceil(a/b)
     }
-    const stack = [];
-    
+
     for (const token of tokens) {
         if (token in map) {
             const b = stack.pop();
@@ -20,5 +20,8 @@ var evalRPN = function(tokens) {
             stack.push(Number(token));
         }
     }
-    return stack[0];
+    return stack.shift();
 };
+
+// 2, 1, +, 3, *
+//(2 + 1) * 3
