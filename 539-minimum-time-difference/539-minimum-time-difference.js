@@ -3,16 +3,15 @@
  * @return {number}
  */
 var findMinDifference = function(timePoints) {
-    // Sort times by hours
-    timePoints.sort();
+    const minutes = timePoints.map(time => {
+        return time.slice(0,2) * 60 + Number(time.slice(3));
+    });
+    minutes.sort((a,b) => a - b);
+    minutes.push(minutes[0] + 60 * 24);
     
-    // Convert times to minutes
-    let minutes = timePoints.map(time => Number(time.slice(0,2)) * 60 + Number(time.slice(3)));
-    
-    // Make the array of minutes circular by pushing the first value + 1440 (24 hours in minutes)
-    minutes.push(minutes[0] + 1440);
-    
-    let result = minutes[1] - minutes[0];
-    for (let i = 2; i < minutes.length; i++) result = Math.min(result, minutes[i] - minutes[i-1]);
+    let result = Infinity;
+    for (let i = 1; i < minutes.length; i++) {
+        result = Math.min(result, minutes[i] - minutes[i-1]);
+    }
     return result;
 };
