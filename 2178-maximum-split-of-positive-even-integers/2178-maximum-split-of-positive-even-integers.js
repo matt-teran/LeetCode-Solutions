@@ -15,9 +15,7 @@ var maximumEvenSplit = function(finalSum) {
     
     if (finalSum === 0) return result;
     
-    if (finalSum - i < 0) {
-        result[result.length - 1] = result.at(-1) + finalSum;
-    } 
+    if (finalSum - i < 0) result[result.length - 1] += finalSum;
     
     return result;
 };
