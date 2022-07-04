@@ -2,14 +2,18 @@
  * @param {number[]} nums
  */
 var NumArray = function(nums) {
-    this.nums = nums;
     this.n = nums.length;
+    // Store the tree in an array of size N * 2
     this.tree = Array(this.n * 2);
-    this.buildTree();
+    // Build the tree
+    this.buildTree(nums);
 };
 
-NumArray.prototype.buildTree = function() {
-	for (let i = this.nums.length, j = 0; i < 2 * this.n; i++, j++) this.tree[i] = this.nums[j];
+NumArray.prototype.buildTree = function(nums) {
+    // Populate the tree array with the leaf nodes (aka start from the bottom)
+	for (let i = this.n; i < 2 * this.n; i++) this.tree[i] = nums[i - this.n];
+    
+    // Populate the parent nodes from the lead nodes up
 	for (let i = this.n - 1; i > 0; i--) this.tree[i] = this.tree[i * 2] + this.tree[i * 2 + 1];
 }
 
@@ -19,16 +23,16 @@ NumArray.prototype.buildTree = function() {
  * @return {void}
  */
 NumArray.prototype.update = function(index, val) {
+    // convert the index of the nums array, to the index of the leaf node in the tree
     index += this.n;
+    
+    // update the value of the leaf node
     this.tree[index] = val;
+    
+    // now to update the parent nodes
     while (index > 0) {
-        let left = index;
-        let right = index;
-        if (index % 2) {
-            left = index - 1;
-        } else {
-            right = index + 1;
-        }
+        let left = index - index % 2;
+        let right = index + (1 - index % 2);
         
         this.tree[Math.floor(index / 2)] = this.tree[left] + this.tree[right];
         index = Math.floor(index / 2);
