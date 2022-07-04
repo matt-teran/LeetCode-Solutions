@@ -2,49 +2,41 @@
  * @param {number[]} nums
  */
 var NumArray = function(nums) {
-    this.tree = [];
+    this.tree = Array(nums.length * 2);
+    this.nums = nums;
     this.n = nums.length;
-    
-    const buildSegTree = (i, lo, hi) => {
-        if (lo === hi) {
-            this.tree[i] = nums[lo];
-            return;
-        }
-
-        let mid = lo + Math.floor((hi - lo) / 2);
-        buildSegTree(2 * i + 1, lo, mid);
-        buildSegTree(2 * i + 2, mid + 1, hi);
-
-        this.tree[i] = this.tree[2 * i + 1] + this.tree[2 * i + 2];
-    };
-    buildSegTree(0, 0, nums.length - 1);
+    this.buildSegTree(0, 0, this.n - 1)
 };
+
+NumArray.prototype.buildSegTree = function(i, lo, hi) {
+    // Leaf node
+    if (lo === hi) {
+        this.tree[i] = this.nums[lo];
+        return;
+    }
+    
+    let m = lo + Math.floor((hi - lo) / 2);
+    this.buildSegTree(2 * i + 1, lo, m);
+    this.buildSegTree(2 * i + 2, m + 1, hi);
+    this.tree[i] = this.tree[2 * i + 1] + this.tree[2 * i + 2];
+}
 
 /** 
  * @param {number} index 
  * @param {number} val
  * @return {void}
  */
-NumArray.prototype.update = function(index, val) {
-    const updateValSegTree = (i, lo, hi) => {
-        // If leaf node, update element
-        if (lo === hi) {
-            return this.tree[i] = val;
-            // return;
-        }
-        
-        // Recurse deeper for appropriate child
-        let mid = lo + Math.floor((hi - lo) / 2);
-        if (index > mid) {
-            updateValSegTree(2 * i + 2, mid + 1, hi, index, val);
-        } else if (index <= mid) {
-            updateValSegTree(2 * i + 1, lo, mid, index, val);
-        }
+NumArray.prototype.update = function(index, val, i=0, lo=0, hi=this.n-1) {
+    if (lo === hi) return this.tree[i] = val;
 
-        // Update non-leaf node
-        this.tree[i] = this.tree[2 * i + 1] + this.tree[2 * i + 2];
+    let mid = lo + Math.floor((hi - lo) / 2);
+    if (index > mid) {
+        this.update(index, val, 2 * i + 2, mid + 1, hi);
+    } else {
+        this.update(index, val, 2 * i + 1, lo, mid);
     }
-    updateValSegTree(0, 0, this.n - 1);
+
+    this.tree[i] = this.tree[2 * i + 1] + this.tree[2 * i + 2];
 };
 
 /** 
