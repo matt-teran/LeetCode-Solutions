@@ -2,20 +2,19 @@
  * @param {number[]} w
  */
 var Solution = function(w) {
-    let sum = w.reduce((acc, num) => acc + num); // n
-    this.probs = w.map((weight, i) => ({prob: weight / sum, i})); // n
-    // this.probs.sort((a,b) => a.prob - b.prob); // n log n
+    let sum = w.reduce((acc, num) => acc + num);
+    this.prob = w.map((weight, i) => [weight/sum, i]);
 };
 
 /**
  * @return {number}
  */
 Solution.prototype.pickIndex = function() {
-    let pick = Math.random();
+    const pick = Math.random();
     let prev = 0;
-    for (const {prob, i} of this.probs) { // n
-        if (pick < prob + prev) return i;
+    for (const [prob, i] of this.prob) {
         prev += prob;
+        if (pick < prev) return i;
     }
 };
 
