@@ -2,41 +2,23 @@
  * @param {number[]} nums
  */
 var NumArray = function(nums) {
-    this.tree = Array(nums.length * 2);
     this.nums = nums;
-    this.n = nums.length;
-    this.buildSegTree(0, 0, this.n - 1)
-};
-
-NumArray.prototype.buildSegTree = function(i, lo, hi) {
-    // Leaf node
-    if (lo === hi) {
-        this.tree[i] = this.nums[lo];
-        return;
-    }
+    let l = Math.sqrt(nums.length);
+    this.length = Math.ceil(nums.length / l);
     
-    let m = lo + Math.floor((hi - lo) / 2);
-    this.buildSegTree(2 * i + 1, lo, m);
-    this.buildSegTree(2 * i + 2, m + 1, hi);
-    this.tree[i] = this.tree[2 * i + 1] + this.tree[2 * i + 2];
-}
+    this.blocks = Array(this.length).fill(0);
+    for (let i = 0; i < nums.length; i++) this.blocks[Math.floor(i / this.length)] += nums[i];
+};
 
 /** 
  * @param {number} index 
  * @param {number} val
  * @return {void}
  */
-NumArray.prototype.update = function(index, val, i=0, lo=0, hi=this.n-1) {
-    if (lo === hi) return this.tree[i] = val;
-
-    let mid = lo + Math.floor((hi - lo) / 2);
-    if (index > mid) {
-        this.update(index, val, 2 * i + 2, mid + 1, hi);
-    } else {
-        this.update(index, val, 2 * i + 1, lo, mid);
-    }
-
-    this.tree[i] = this.tree[2 * i + 1] + this.tree[2 * i + 2];
+NumArray.prototype.update = function(index, val) {
+    let blockIndex = Math.floor(index / this.length);
+    this.blocks[blockIndex] = this.blocks[blockIndex] - this.nums[index] + val;
+    this.nums[index] = val;
 };
 
 /** 
@@ -45,28 +27,20 @@ NumArray.prototype.update = function(index, val, i=0, lo=0, hi=this.n-1) {
  * @return {number}
  */
 NumArray.prototype.sumRange = function(left, right) {
-    const querySegTree = (treeIndex, lo, hi, i, j) => {
-        
-        // Return 0 (null) if segment is completely out of range
-        if (lo > j || hi < i)  return 0;
+    let sum = 0;
+    let startBlock = Math.floor(left / this.length);
+    let endBlock = Math.floor(right / this.length);
 
-        // Range matches segment exactly => 
-        if (i === lo && j === hi) return this.tree[treeIndex];
-        
-        
-        let mid = lo + Math.floor((hi - lo) / 2);
-
-        // Partial overlap of segment and range, so we query deeper
-        if (i > mid) return querySegTree(2 * treeIndex + 2, mid + 1, hi, i, j);
-        if (j <= mid) return querySegTree(2 * treeIndex + 1, lo, mid, i, j);
-
-        let leftQuery = querySegTree(2 * treeIndex + 1, lo, mid, i, mid);
-        let rightQuery = querySegTree(2 * treeIndex + 2, mid + 1, hi, mid + 1, j);
-
-        return leftQuery + rightQuery;
+    if (startBlock === endBlock) {
+        for (let i = left; i <= right; i++) {
+            sum += this.nums[i];
+        }
+    } else {
+        for (let i = left; i < (startBlock + 1) * this.length; i++) sum += this.nums[i];
+        for (let i = startBlock + 1; i < endBlock; i++) sum += this.blocks[i];
+        for (let i = endBlock * this.length; i <= right; i++) sum += this.nums[i];
     }
-    
-    return querySegTree(0, 0, this.n - 1, left, right);
+    return sum;
 };
 
 /** 
