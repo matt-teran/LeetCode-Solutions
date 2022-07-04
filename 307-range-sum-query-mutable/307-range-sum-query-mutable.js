@@ -3,12 +3,15 @@
  */
 var NumArray = function(nums) {
     this.nums = nums;
-    let l = Math.sqrt(nums.length);
-    this.length = Math.ceil(nums.length / l);
-    
-    this.blocks = Array(this.length).fill(0);
-    for (let i = 0; i < nums.length; i++) this.blocks[Math.floor(i / this.length)] += nums[i];
+    this.n = nums.length;
+    this.tree = Array(this.n * 2);
+    this.buildTree();
 };
+
+NumArray.prototype.buildTree = function() {
+	for (let i = this.nums.length, j = 0; i < 2 * this.n; i++, j++) this.tree[i] = this.nums[j];
+	for (let i = this.n - 1; i > 0; i--) this.tree[i] = this.tree[i * 2] + this.tree[i * 2 + 1];
+}
 
 /** 
  * @param {number} index 
@@ -16,9 +19,20 @@ var NumArray = function(nums) {
  * @return {void}
  */
 NumArray.prototype.update = function(index, val) {
-    let blockIndex = Math.floor(index / this.length);
-    this.blocks[blockIndex] = this.blocks[blockIndex] - this.nums[index] + val;
-    this.nums[index] = val;
+    index += this.n;
+    this.tree[index] = val;
+    while (index > 0) {
+        let left = index;
+        let right = index;
+        if (index % 2) {
+            left = index - 1;
+        } else {
+            right = index + 1;
+        }
+        
+        this.tree[Math.floor(index / 2)] = this.tree[left] + this.tree[right];
+        index = Math.floor(index / 2);
+    }
 };
 
 /** 
@@ -27,19 +41,24 @@ NumArray.prototype.update = function(index, val) {
  * @return {number}
  */
 NumArray.prototype.sumRange = function(left, right) {
+    left += this.n;
+    right += this.n;
     let sum = 0;
-    let startBlock = Math.floor(left / this.length);
-    let endBlock = Math.floor(right / this.length);
-
-    if (startBlock === endBlock) {
-        for (let i = left; i <= right; i++) {
-            sum += this.nums[i];
+    while (left <= right) {
+        if (left % 2 === 1) {
+            sum += this.tree[left];
+            left++;
         }
-    } else {
-        for (let i = left; i < (startBlock + 1) * this.length; i++) sum += this.nums[i];
-        for (let i = startBlock + 1; i < endBlock; i++) sum += this.blocks[i];
-        for (let i = endBlock * this.length; i <= right; i++) sum += this.nums[i];
+        
+        if (right % 2 === 0) {
+            sum += this.tree[right];
+            right--;
+        }
+        
+        left = Math.floor(left / 2);
+        right = Math.floor(right / 2);
     }
+    
     return sum;
 };
 
