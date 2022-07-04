@@ -6,30 +6,20 @@
  * @return {string}
  */
 var findReplaceString = function(s, indices, sources, targets) {
-    const k = indices.length;
-    const conversions = [];
-    for (let i = 0; i < k; i++) conversions.push({i: indices[i], source: sources[i], target: targets[i]});
-    conversions.sort((a,b) => a.i - b.i);
-    console.log(conversions)
-    let constructed = '';
-    let i = 0;
-    let j = 0;
-    while (i < s.length) {
-        if (j < conversions.length && i === conversions[j].i) {
-            if (s.indexOf(conversions[j].source, conversions[j].i) === conversions[j].i) {
-                constructed = constructed + conversions[j].target;
-                i += conversions[j].source.length;
-            } else {
-                constructed = constructed + s[i];
-                i++;
-            }
-            j++;
-        } else {
-            constructed = constructed + s[i];
-            i++;
+    let k = indices.length;
+    let constructed = s.split('');
+    let conversions = indices.map((index, i) => [index, sources[i], targets[i]]);
+
+    for (const [index, source, target] of conversions) {
+        if (!s.startsWith(source, index)) continue;
+        constructed[index] = target;
+        
+        for (let j = index + 1; j < source.length + index; j++) {
+            constructed[j] = '';
         }
     }
-    return constructed;
+
+    return constructed.join('');
 };
 
 // 0b1d
