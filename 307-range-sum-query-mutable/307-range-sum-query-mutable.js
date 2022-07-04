@@ -31,8 +31,15 @@ NumArray.prototype.update = function(index, val) {
     
     // now to update the parent nodes
     while (index > 0) {
-        let left = index - index % 2;
-        let right = index + (1 - index % 2);
+        let left = index; // - index % 2;
+        let right = index; // + (1 - index % 2);
+        
+        index % 2 ? left-- : right++;
+        // if (index % 2 === 1) { 
+        //     left = index - 1; 
+        // } else {
+        //     right = index + 1;
+        // }
         
         this.tree[Math.floor(index / 2)] = this.tree[left] + this.tree[right];
         index = Math.floor(index / 2);
