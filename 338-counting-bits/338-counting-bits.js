@@ -3,18 +3,10 @@
  * @return {number[]}
  */
 var countBits = function(n) {
-    let result = Array(n + 1).fill(0); 
+    let result = [0];
     
-    let x = 0;
-    let bit = 1;
-    
-    while (bit <= n) {
-        while (x + bit <= n) {
-            result[bit + x] = 1 + result[x];
-            x++;
-        }
-        x = 0;
-        bit <<= 1;
+    for (let i = 1; i <= n; i++) {
+        result.push(result[i >> 1] + (i & 1));
     }
     return result;
 };
