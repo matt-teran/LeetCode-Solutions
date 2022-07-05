@@ -3,35 +3,25 @@
  * @return {number}
  */
 var maximalSquare = function(matrix) {
-    let R = matrix.length;
-    let C = matrix[0].length;
-    let maxSquareLength = 0;
-
-    for (let i = 0; i < R; i++) {
-        for (let j = 0; j < C; j++) {
-            if (matrix[i][j] === '1') {
-                let squareLength = 1;
-                let flag = true;
-                while (squareLength + i < R && squareLength + j < C && flag) {
-                    for (let k = j; k <= squareLength + j; k++) {
-                        if (matrix[i + squareLength][k] === '0') {
-                            flag = false;
-                            break;
-                        }
-                    }
-                    for (let k = i; k <= squareLength + i; k++) {
-                        if (matrix[k][j + squareLength] === '0') {
-                            flag = false;
-                            break;
-                        }
-                    }
-                    if (flag) squareLength++;
-                }
-                if (maxSquareLength < squareLength) {
-                    maxSquareLength = squareLength;
-                }
-            }
+    const R = matrix.length;
+    const C = matrix[0].length;
+    const memo = {};
+    
+    const dp = (r, c) => {
+        if (r === R || c === C) return 0;
+        if (matrix[r][c] === '0') return 0;
+        
+        if (!(r in memo)) memo[r] = {};
+        if (!(c in memo[r])) {
+            memo[r][c] = 1 + Math.min(dp(r+1,c), dp(r,c+1), dp(r+1,c+1));
+        }
+        return memo[r][c];
+    };
+    let result = 0;
+    for (let r = 0; r < R; r++) {
+        for (let c = 0; c < C; c++) {
+            result = Math.max(result, dp(r,c));
         }
     }
-    return maxSquareLength ** 2;
+    return result ** 2;
 };
