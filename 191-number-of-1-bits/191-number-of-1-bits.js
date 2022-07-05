@@ -3,11 +3,9 @@
  * @return {number}
  */
 var hammingWeight = function(n) {
-    let res = 0;
-    let mask = 1;
+    let count = 0;
     for (let i = 0; i < 32; i++) {
-        if ((n & mask) !== 0) res++;
-        mask <<= 1;
+        if ((n >> i) & 1) count++;
     }
-    return res;
+    return count;
 };
