@@ -3,13 +3,13 @@
  * @return {number[]}
  */
 var countBits = function(n) {
-    const result = Array(n+1).fill(0);
-    
+    const result = [0];
     for (let i = 1; i <= n; i++) {
-        let cur = 0;
-        for (const char of i.toString(2)) char === '1' && cur++;
-        result[i] = cur;
+        let count = 0;
+        for (let j = 0; j < 32; j++) {
+            if (1 & (i >> j)) count++;
+        }
+        result.push(count);
     }
-    
     return result;
 };
