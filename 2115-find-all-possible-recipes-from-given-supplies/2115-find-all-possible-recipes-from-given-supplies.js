@@ -5,24 +5,34 @@
  * @return {string[]}
  */
 var findAllRecipes = function(recipes, ingredients, supplies) {
+    const available = new Set(supplies);
     const result = [];
-    const seen = new Set(supplies);
-    const zip = (arr1, arr2) => arr1.map((el, i) => [el, arr2[i]]);
+    const ingredientToRecipe = {};
+    const inDegree = {};
+    const zip = (a, b) => a.map((el,i) => [el, b[i]]);
 
-    const dq = zip(recipes, ingredients);
-    console.log(dq);
-    let prevSize = seen.size - 1;
-
-    while (seen.size > prevSize) {
-        prevSize = seen.size;
-        for (let i = 0; i < dq.length; i++) {
-            let [r, ing] = dq.shift();
-            if (ing.every(i => seen.has(i))) {
-                result.push(r);
-                seen.add(r);
-            } else {
-                dq.push([r, ing]);
+    for (const [rcp, ingredient] of zip(recipes, ingredients)) {
+        let nonAvailable = 0;
+        for (const ing of ingredient) {
+            if (!available.has(ing)) {
+                nonAvailable++;
+                if (!(ing in ingredientToRecipe)) ingredientToRecipe[ing] = new Set();
+                ingredientToRecipe[ing].add(rcp);
             }
+        }
+        if (nonAvailable === 0) {
+            result.push(rcp);
+        } else {
+            inDegree[rcp] = nonAvailable;
+        }
+    }
+    for (const rcp of result) {
+        if (rcp in ingredientToRecipe) {
+            for (const recipe of ingredientToRecipe[rcp]) {
+                inDegree[recipe]--;
+                if (inDegree[recipe] === 0) result.push(recipe);
+            }
+            delete ingredientToRecipe[rcp];
         }
     }
     return result;
