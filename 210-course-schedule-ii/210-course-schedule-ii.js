@@ -5,25 +5,29 @@
  */
 var findOrder = function(numCourses, prerequisites) {
     const result = [];
-    const q = [];
+    
     const adj = {};
-    const inDegree = {};
+    const indegree = {};
     for (let i = 0; i < numCourses; i++) {
         adj[i] = [];
-        inDegree[i] = 0;
-    };
+        indegree[i] = 0;
+    }
     for (const [dest, src] of prerequisites) {
-        adj[src].push(dest)
-        inDegree[dest]++;
-    };
+        adj[src].push(dest);
+        indegree[dest]++;
+    }
     
-    for (const course in inDegree) if (!inDegree[course]) q.push(course);
+    const q = [];
+    for (const course in indegree) if (!indegree[course]) q.push(course);
+    
     while (q.length) {
         let src = q.shift();
         for (const dest of adj[src]) {
-            if (!(inDegree[dest]-- - 1)) q.push(dest);
+            indegree[dest]--;
+            if (!indegree[dest]) q.push(dest);
         }
         result.push(src);
     }
+    
     return result.length === numCourses ? result : [];
 };
