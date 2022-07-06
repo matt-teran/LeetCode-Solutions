@@ -2,38 +2,42 @@
  * @param {number[][]} points
  * @return {number}
  */
-var getDist = (a, b) => {
-    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
-}
-
+var dist = (a,b) => Math.abs(a[0]-b[0]) + Math.abs(a[1]-b[1]);
 var minCostConnectPoints = function(points) {
-    const adj = {};
-    for (let i = 0; i < points.length; i++) adj[i] = [];
-    for (let i = 0; i < points.length; i++) {
-        const [x1, y1] = points[i];
+    const edges = new MinPriorityQueue({compare: (a,b) => a[2] > b[2]});
+    for (let i = 0; i < points.length - 1; i++) {
         for (let j = i + 1; j < points.length; j++) {
-            const [x2, y2] = points[j];
-            const dist = Math.abs(x2 - x1) + Math.abs(y2 - y1);
-            
-            adj[i].push([dist, j]);
-            adj[j].push([dist, i]);
+            const [a,b] = [points[i], points[j]]
+            edges.enqueue([i,j,dist(a,b)])
         }
     }
-    
-    // Prims
-    const visited = new Set();
-    let result = 0;
-    let frontier = new MinPriorityQueue({compare: (a, b) => a[0] > b[0]});
-    frontier.enqueue([0, 0])
-    
-    while (visited.size < points.length) {
-        let [cost, i] = frontier.dequeue();
-        if (visited.has(i)) continue;
-        result += cost;
-        visited.add(i);
-        for (let [neiCost, nei] of adj[i]) {
-            if (!visited.has(nei)) frontier.enqueue([neiCost, nei])
+    const root = [];
+    const rank = Array(points.length).fill(0);
+    for (let i = 0; i < points.length; i++) root.push(i);
+    const find = x => x === root[x] ? x : root[x] = find(root[x]);
+    const union = (x,y) => {
+        let rootX = find(x);
+        let rootY = find(y);
+        if (rootX === rootY) return false;
+        
+        if (rank[rootX] > rank[rootY]) {
+            root[rootY] = rootX;
+        } else if (rank[rootX] < rank[rootY]) {
+            root[rootX] = rootY;
+        } else {
+            root[rootY] = rootX;
+            rank[rootX]++;
         }
+        return true;
     }
-    return result
+    let cost = 0;
+    let numberOfEdges = 0;
+
+    while (numberOfEdges < points.length - 1 && edges.size()) {
+        const [a, b, c] = edges.dequeue();
+        if (!union(a,b)) continue;
+        cost += c;
+        numberOfEdges++;
+    }
+    return cost;
 };
