@@ -13,12 +13,11 @@ var Trie = function() {
  */
 Trie.prototype.insert = function(word) {
     let node = this.root;
-    for (let char of word) {
+    for (const char of word) {
         if (char in node.children) {
             node = node.children[char];
         } else {
-            node.children[char] = new TrieNode();
-            node = node.children[char];
+            node = node.children[char] = new TrieNode();
         }
     }
     node.endOfWord = true;
@@ -30,7 +29,7 @@ Trie.prototype.insert = function(word) {
  */
 Trie.prototype.search = function(word) {
     let node = this.root;
-    for (let char of word) {
+    for (const char of word) {
         if (char in node.children) {
             node = node.children[char];
         } else {
@@ -46,14 +45,14 @@ Trie.prototype.search = function(word) {
  */
 Trie.prototype.startsWith = function(prefix) {
     let node = this.root;
-    for (let char of prefix) {
+    for (const char of prefix) {
         if (char in node.children) {
             node = node.children[char];
         } else {
             return false;
         }
     }
-    return true;;
+    return true;
 };
 
 /** 
