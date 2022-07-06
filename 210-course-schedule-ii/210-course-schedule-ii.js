@@ -4,46 +4,39 @@
  * @return {number[]}
  */
 var findOrder = function(numCourses, prerequisites) {
-    // create adjacency list
-    const map = {};
-    const order = new Set();
-    const visited = new Set();
+    const WHITE = 1;
+    const GRAY = 2;
+    const BLACK = 3;
+    const adj = {};
+    for (const [dest, src] of prerequisites) {
+        adj[src] ? adj[src].push(dest) : adj[src] = [dest];
+    }
+    const s = [];
+    let isPossible = true;
+    const color = {};
     for (let i = 0; i < numCourses; i++) {
-        map[i] = [];
+        color[i] = WHITE;
     }
-    for (let [course, prereq] of prerequisites) {
-        map[course].push(prereq);
-    }
-    
-    const dfs = (course) => {
-        if (visited.has(course)) {
-            return false;
-        }
-        if (map[course].length === 0) {
-            // order.push(course);
-            order.add(course);
-            return true;
-        }
+    const dfs = (node) => {
+        if (!isPossible) return;
         
-        visited.add(course);
-        for (let prereq of map[course]) {
-            if (!dfs(prereq)) return false;
-        }
-        visited.delete(course);
+        color[node] = GRAY;
         
-        map[course] = [];
-        // order.push(course);
-        order.add(course);
-        return true;
+        if (node in adj) {
+            for (const neighbor of adj[node]) {
+                if (color[neighbor] === WHITE) {
+                    dfs(neighbor);
+                } else if (color[neighbor] === GRAY) {
+                    isPossible = false;
+                }
+            }
+        }
+        color[node] = BLACK;
+        s.push(node);
     }
     
     for (let i = 0; i < numCourses; i++) {
-        if (!dfs(i)) return [];
+        if (color[i] === WHITE) dfs(i);
     }
-    return [...order];
-    // go  through courses
-    // for each class, if it has prereqs, try and complete those prereqs first
-    // once the prereqs are completed, complete the class
-    // move on to next class
-    //return order
+    return isPossible ? s.reverse() : [];
 };
