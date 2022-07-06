@@ -5,32 +5,38 @@
  * @return {string[]}
  */
 var findAllRecipes = function(recipes, ingredients, supplies) {
+    // Create Supply hashset
+    // Create an adjacency list
+    // Create result
+    
+    // Iterate recipes
+    // Iterate recipe's ingredients (DFS)
+    // If a recipe has no ingredients, and it's in the supply set => true
+    const N = recipes.length;
     const supply = new Set(supplies);
-    const adj = {};
-    for (let i = 0; i < recipes.length; i++) adj[recipes[i]] = ingredients[i];
-    for (let i = 0; i < ingredients.length; i++) {
-        for (const ingredient of ingredients[i]) if (!(ingredient in adj)) adj[ingredient] = [];
-    }
     const visited = new Set();
-    const result = new Set();
+    const adj = {};
+    const result = [];
+    for (let i = 0; i < N; i++) adj[recipes[i]] = ingredients[i];
     
     const dfs = (recipe) => {
-        if (visited.has(recipe)) return false
-        if (adj[recipe].length === 0) return supply.has(recipe);
+        if (supply.has(recipe)) return true;
+        if (visited.has(recipe) || !(recipe in adj)) return false;
         
         visited.add(recipe);
-        for (const ingredient of adj[recipe]) {
-            if (!dfs(ingredient)) return false;
+        
+        for (const i of adj[recipe]) {
+            if (!dfs(i)) return false;
         }
+        
         visited.delete(recipe);
         
-        supply.add(recipe);
         return true;
     }
     
     for (const recipe of recipes) {
-        if (dfs(recipe)) result.add(recipe);
+        if (dfs(recipe)) result.push(recipe);
     }
     
-    return [...result]
+    return result;
 };
