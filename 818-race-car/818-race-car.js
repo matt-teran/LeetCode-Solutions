@@ -2,32 +2,28 @@
  * @param {number} target
  * @return {number}
  */
-var racecar = function(target) {
-    const initialState = [0, 1];
-    const visited = new Set();
-    const q = [initialState];
-    visited.add(initialState.join('#'));
+const racecar = (target) => {
+    const state = [0, 1] // pos, spd
+    const q = [state];
+    const visited = new Set(state.join('#'));
     
     for (let level = 0; q.length; level++) {
         for (let i = q.length; i > 0; i--) {
-            const [pos, spd] = q.shift();
-            
+            let [pos, spd] = q.shift();
+        
             if (pos === target) return level;
-            
-            let newState = [pos+spd, spd * 2];
-            let key = newState.join('#');
-            if (!visited.has(key) && 0 < newState[0] && newState[0] < target * 2) {
+
+            let newState = [pos + spd, spd * 2];
+            if (!visited.has(newState.join('#')) && pos > -1 && pos < target * 2) {
                 q.push(newState);
-                visited.add(key);
+                visited.add(newState.join('#'))
             }
-            
+
             newState = [pos, spd > 0 ? -1 : 1];
-            key = newState.join('#');
-            if (!visited.has(key) && 0 < newState[0] && pos < target * 2) {
+            if (!visited.has(newState.join('#')) && pos > -1 && pos < target * 2) {
                 q.push(newState);
-                visited.add(key);
+                visited.add(newState.join('#'))
             }
         }
     }
-    return -1;
 };
