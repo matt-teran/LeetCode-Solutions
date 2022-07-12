@@ -3,35 +3,35 @@
  * @return {number}
  */
 var numIslands = function(grid) {
-    const ROWS = grid.length;
-    const COLS = grid[0].length;
-    const DIR = [[1,0],[0,1],[-1,0],[0,-1]];
-    let islandCount = 0;
+    let result = 0;
+    const DIR = [[1,0],[-1,0],[0,1],[0,-1]];
     const q = [];
-    const bfs = () => {
-        islandCount++;
-        while(q.length) {
-            let qLen = q.length;
-            for (let i = 0; i < qLen; i++) {
-                let [row, col] = q.shift();
-                for (let [dr, dc] of DIR) {
-                    let [r,c] = [row+dr,col+dc];
-                    if (grid?.[r]?.[c] === "1") {
-                        grid[r][c] = "2";
-                        q.push([r,c]);
-                    }
+    const bfs = (row, col) => {
+        q.push([row, col]);
+        
+        while (q.length) {
+            let [r, c] = q.shift();
+            
+            for (const [dr, dc] of DIR) {
+                let [nr, nc] = [dr + r, dc + c];
+                
+                if (grid?.[nr]?.[nc] === "1") {
+                    grid[nr][nc] = '2';
+                    q.push([nr, nc]);
                 }
             }
         }
     }
     
-    for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
+    for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[0].length; c++) {
             if (grid[r][c] === '1') {
-                q.push([r,c]);
-                bfs();
+                grid[r][c] = '2';
+                result++;
+                bfs(r, c);
             }
         }
     }
-    return islandCount;
+    
+    return result;
 };
