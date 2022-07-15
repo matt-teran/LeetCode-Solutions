@@ -4,11 +4,10 @@ class Solution:
             return False
         sCount = Counter()
         tCount = Counter()
-        for char in s:
-            sCount[char] += 1
-        for char in t:
-            tCount[char] += 1
-        for char in s:
-            if sCount[char] != tCount[char]:
+        for i in range(len(s)):
+            sCount[s[i]] += 1
+            tCount[t[i]] += 1
+        for c in sCount:
+            if sCount[c] != tCount[c]:
                 return False
         return True
