@@ -3,22 +3,21 @@
  * @return {number[][]}
  */
 var subsetsWithDup = function(nums) {
-    const result = [];
-    // const subset = [];
-    nums.sort((a, b) => a - b);
+    nums.sort((a,b) => a - b);
+    const subsets = [];
     
-    const dfs = (i, subset) => {
-        if (i === nums.length) return result.push([...subset]);
+    const backtrack = (i, subset) => {
+        subsets.push([...subset]);
         
-        subset.push(nums[i]);
-        dfs(i + 1, subset);
-        
-        subset.pop();
-        while (i + 1 < nums.length && nums[i] === nums[i + 1]) i++;
-        dfs(i + 1, subset);
+       for (let j = i; j < nums.length; j++) {
+           if (j > i && nums[j] === nums[j - 1]) continue;
+           
+           subset.push(nums[j]);
+           backtrack(j+1, subset);
+           subset.pop();
+       }
     };
+    backtrack(0, []);
     
-    dfs(0, []);
-    
-    return result;
+    return subsets;
 };
