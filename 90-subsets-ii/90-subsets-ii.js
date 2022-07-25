@@ -4,20 +4,20 @@
  */
 var subsetsWithDup = function(nums) {
     nums.sort((a,b) => a - b);
-    const subsets = [];
+    const result = [];
     
-    const backtrack = (i, subset) => {
-        subsets.push([...subset]);
+    const backtrack = (i, combo) => {
+        if (i === nums.length) return result.push([...combo]);
         
-       for (let j = i; j < nums.length; j++) {
-           if (j > i && nums[j] === nums[j - 1]) continue;
-           
-           subset.push(nums[j]);
-           backtrack(j+1, subset);
-           subset.pop();
-       }
+        combo.push(nums[i]);
+        backtrack(i + 1, combo);
+        
+        combo.pop();
+        while (i + 1 < nums.length && nums[i] === nums[i + 1]) i++;
+        backtrack(i + 1, combo);
     };
+    
     backtrack(0, []);
     
-    return subsets;
+    return result;
 };
