@@ -12,16 +12,15 @@
  */
 var maxPathSum = function(root) {
     let maxSum = -Infinity;
-    
-    const maxGain = (node) => {
+    const find = (node) => {
         if (!node) return 0;
-        let leftGain = Math.max(maxGain(node.left), 0);
-        let rightGain = Math.max(maxGain(node.right), 0);
         
-        maxSum = Math.max(maxSum, node.val+leftGain+rightGain);
+        let l = Math.max(find(node.left), 0);
+        let r = Math.max(find(node.right), 0);
+        maxSum = Math.max(maxSum, node.val + l + r);
         
-        return node.val + Math.max(leftGain, rightGain);
+        return node.val + Math.max(l, r);
     }
-    maxGain(root);
+    find(root);
     return maxSum;
 };
