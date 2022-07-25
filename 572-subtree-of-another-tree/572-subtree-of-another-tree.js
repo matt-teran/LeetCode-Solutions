@@ -11,25 +11,27 @@
  * @param {TreeNode} subRoot
  * @return {boolean}
  */
-var isSameTree = (n1, n2) => {
-    if (!n1 && !n2) return true;
-    if (n1?.val !== n2?.val) return false;
-    
-    return isSameTree(n1.left, n2.left) && isSameTree(n1.right, n2.right);
-}
+
 var isSubtree = function(root, subRoot) {
     if (!subRoot) return true;
+    let res = false;
+    
+    var isSameTree = (n1, n2) => {
+        if (!n1 && !n2) return true;
+        if (n1?.val !== n2?.val) return false;
+
+        return isSameTree(n1.left, n2.left) && isSameTree(n1.right, n2.right);
+    }
     
     const dfs = (node) => {
         if (!node) return false;
-        if (node.val === subRoot.val) {
-            return isSameTree(node, subRoot) ||
-                dfs(node.left) ||
-                dfs(node.right);
-        };
+        if (node.val === subRoot.val && isSameTree(node, subRoot)) return res = true;
         
-        return dfs(node.left) || dfs(node.right);
+        dfs(node.left);
+        dfs(node.right);
     };
     
-    return dfs(root);
+    dfs(root);
+
+    return res;
 };
