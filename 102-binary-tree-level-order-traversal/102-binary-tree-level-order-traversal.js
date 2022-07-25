@@ -11,31 +11,21 @@
  * @return {number[][]}
  */
 var levelOrder = function(root) {
-    // if input is null, return empty array
-    if (!root) return [];
-    
-    let result = [];
-    let queue = [root];
-    
-    while (queue.length > 0) {
-        let level = [];
-        const qLen = queue.length;
-        
+    const result = [];
+    const q = [root];
+    while (q.length) {
+        const qLen = q.length;
+        let cur = [];
         for (let i = 0; i < qLen; i++) {
-            let node = queue.shift();
+            let node = q.shift();
             
             if (node) {
-                level.push(node.val);
-                queue.push(node.left, node.right);
+                cur.push(node.val);
+                q.push(node.left, node.right);
             }
+            
         }
-        
-        if (level.length > 0) result.push(level);
+        if (cur.length) result.push(cur);
     }
-    
     return result;
-    // look at the root node, push its children into a queue
-    // look at the nodes in the queue, remove them while pushing their children into the queue
-    // each time we repopulate the queue, we'll push the set of removed nodes to the result
-    // then when the queue is empty, we'll return the result
 };
