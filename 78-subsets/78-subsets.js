@@ -3,21 +3,17 @@
  * @return {number[][]}
  */
 var subsets = function(nums) {
-    let result = [];
-    let subset = [];
+    const result = [];
     
-    const dfs = (i) => {
-        if (i === nums.length) {
-            result.push([...subset])
-            return;
-        }
+    const backtrack = (i, cur) => {
+        if (i === nums.length) return result.push([...cur]);
+        cur.push(nums[i]);
+        backtrack(i + 1, cur);
         
-        subset.push(nums[i]);
-        dfs(i + 1);
-        
-        subset.pop();
-        dfs(i + 1);
-    }
-    dfs(0);
+        cur.pop();
+        backtrack(i + 1, cur);
+    };
+    backtrack(0, []);
+    
     return result;
 };
