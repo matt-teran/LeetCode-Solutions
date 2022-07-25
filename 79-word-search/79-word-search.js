@@ -4,21 +4,19 @@
  * @return {boolean}
  */
 var exist = function(board, word) {
+    const ROWS = board.length;
+    const COLS = board[0].length;
     const DIR = [[1, 0], [-1, 0], [0, -1], [0, 1]];
     const backtrack = (row, col, i) => {
         if (i === word.length) return true;
-        const q = [[row, col]];
         
-        while (q.length) {
-            let [r, c] = q.shift();
+        for (const [dr, dc] of DIR) {
+            const [r, c] = [row + dr, col + dc];
             
-            for (let [dr, dc] of DIR) {
-                let [nr, nc] = [r + dr, c + dc];
-                if (board?.[nr]?.[nc] === word[i]) {
-                    board[nr][nc] = '#';
-                    if (backtrack(nr, nc, i+1)) return true;
-                    board[nr][nc] = word[i];
-                }
+            if (board?.[r]?.[c] === word[i]) {
+                board[r][c] = '#';
+                if (backtrack(r, c, i+1)) return true;
+                board[r][c] = word[i];
             }
         }
         return false;
