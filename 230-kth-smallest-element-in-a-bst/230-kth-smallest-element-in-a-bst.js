@@ -12,23 +12,8 @@
  * @return {number}
  */
 var kthSmallest = function(root, k) {
-    let heap = new MinPriorityQueue();
-    
-    const q = [root];
-    while (q.length) {
-        for (let i = q.length; i > 0; i--) {
-            let node = q.shift();
-            
-            if (!node) continue;
-            heap.enqueue(node.val);
-            q.push(node.left, node.right);
-        }
-    }
-    
-    while (k > 1) {
-        heap.dequeue();
-        k--;
-    }
-
-    return heap.front().element;
+    const inorder = (node) => {
+        return node ? [...inorder(node.left), node.val, ...inorder(node.right)] : [];
+    };
+    return inorder(root)[k - 1];
 };
