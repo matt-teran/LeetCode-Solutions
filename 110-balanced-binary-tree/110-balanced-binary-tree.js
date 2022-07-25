@@ -10,21 +10,14 @@
  * @param {TreeNode} root
  * @return {boolean}
  */
+var height = (node) => {
+    if (!node) return -1;
+    return 1 + Math.max(height(node.left), height(node.right));
+}
 var isBalanced = function(root) {
-    const getHeight = (node) => {
-        if (!node) return 0;
-        return 1 + Math.max(getHeight(node.left), getHeight(node.right));
-    }
+    if (!root) return true;
     
-    const validate = (node) => {
-        if (!node) return true;
-        
-        const [l, r] = [getHeight(node.left), getHeight(node.right)];
-        
-        if (Math.abs(l - r) > 1) return false;
-        
-        return validate(node.left) && validate(node.right);
-    }
-    
-    return validate(root);
+    return Math.abs(height(root.left) - height(root.right)) < 2 &&
+        isBalanced(root.left) &&
+        isBalanced(root.right);
 };
