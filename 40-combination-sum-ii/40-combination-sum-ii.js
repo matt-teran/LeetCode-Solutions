@@ -4,25 +4,24 @@
  * @return {number[][]}
  */
 var combinationSum2 = function(candidates, target) {
-    candidates.sort((a,b)=>a-b);
+    candidates.sort((a,b) => a - b);
+    
     const result = [];
     const combo = [];
-    let sum = 0;
     
-    const backtrack = (i) => {
+    const backtrack = (i, sum) => {
         if (sum === target) return result.push([...combo]);
-        if (sum > target || i === candidates.length) return;
+        if (i === candidates.length || sum > target) return;
         
         combo.push(candidates[i]);
-        sum+=candidates[i]
-        backtrack(i+1);
-        sum-=candidates[i]
-        combo.pop();
+        backtrack(i + 1, sum + candidates[i]);
         
-        while (i < candidates.length && candidates[i] === candidates[i+1]) i++;
-        backtrack(i+1);
-    }
-    backtrack(0);
+        combo.pop();
+        while (i + 1 < candidates.length && candidates[i] === candidates[i + 1]) i++;
+        backtrack(i + 1, sum);
+    };
+    
+    backtrack(0, 0);
     
     return result;
 };
