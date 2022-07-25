@@ -12,12 +12,25 @@
  * @return {TreeNode}
  */
 var buildTree = function(preorder, inorder) {
-    if (!preorder.length || !inorder.length) return null;
+    const hash = {};
+    for (let i = 0; i < preorder.length; i++) {
+        hash[inorder[i]] = i;
+    }
     
-    let root = new TreeNode(preorder[0]);
-    let mid = inorder.indexOf(preorder[0]);
-    root.left = buildTree(preorder.slice(1, mid + 1), inorder.slice(0, mid));
-    root.right = buildTree(preorder.slice(mid + 1), inorder.slice(mid + 1));
+    let i = 0;
     
-    return root;
+    const arrayToTree = (l, r) => {
+        if (l > r) return null;
+        
+        let rootVal = preorder[i++];
+        let root = new TreeNode(rootVal);
+        
+        root.left = arrayToTree(l, hash[rootVal] - 1);
+        root.right = arrayToTree(hash[rootVal] + 1, r);
+        
+        return root;
+    }
+    
+    
+    return arrayToTree(0, preorder.length- 1);
 };
