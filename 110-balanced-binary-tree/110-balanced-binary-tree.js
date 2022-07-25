@@ -11,17 +11,20 @@
  * @return {boolean}
  */
 var isBalanced = function(root) {
-    
-    
-    const dfs = (root) => {
-        if (!root) return [true, 0];
-        
-        let [left, right] = [dfs(root.left), dfs(root.right)];
-        
-        let balanced = left[0] && right[0] && Math.abs(left[1] - right[1]) <= 1;
-        
-        return [balanced, 1 + Math.max(left[1], right[1])];
+    const getHeight = (node) => {
+        if (!node) return 0;
+        return 1 + Math.max(getHeight(node.left), getHeight(node.right));
     }
     
-    return dfs(root)[0]
+    const validate = (node) => {
+        if (!node) return true;
+        
+        const [l, r] = [getHeight(node.left), getHeight(node.right)];
+        
+        if (Math.abs(l - r) > 1) return false;
+        
+        return validate(node.left) && validate(node.right);
+    }
+    
+    return validate(root);
 };
