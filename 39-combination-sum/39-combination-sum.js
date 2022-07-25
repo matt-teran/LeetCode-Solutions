@@ -7,20 +7,17 @@ var combinationSum = function(candidates, target) {
     const result = [];
     const combo = [];
     
-    const dfs = (i, sum) => {
-        if (sum === target) {
-            result.push([...combo]);
-            return;
-        }
-        if (sum > target || i === candidates.length) return;
+    const backtrack = (i, sum) => {
+        if (sum === target) return result.push([...combo]);
+        if (i === candidates.length || sum > target) return;
         
         combo.push(candidates[i]);
-        dfs(i, sum + candidates[i]);
+        backtrack(i, sum + candidates[i]);
         
         combo.pop();
-        dfs(i + 1, sum);
-    }
+        backtrack(i + 1, sum);
+    };
+    backtrack(0, 0);
     
-    dfs(0, 0);
     return result;
 };
