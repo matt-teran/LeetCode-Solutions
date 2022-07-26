@@ -18,20 +18,21 @@ var orangesRotting = function(grid) {
     let minutes = 0;
     
     while (q.length) {
-        let increment = false;
+        // let increment = false;
+        minutes++;
         for (let i = q.length; i > 0; i--) {
             const [row, col] = q.shift();
             for (const [dr, dc] of DIR) {
                 let [r,c] = [row + dr, col + dc];
                 
                 if (grid?.[r]?.[c] === 1) {
-                    increment = true;
+                    // increment = true;
                     grid[r][c] = 2;
                     q.push([r,c]);
                 }
             }
         }
-        if (increment) minutes++;
+        // if (increment) minutes++;
     }
     
     for (let r = 0; r < ROWS; r++) {
@@ -39,5 +40,5 @@ var orangesRotting = function(grid) {
             if (grid[r][c] === 1) return -1;
         }
     }
-    return minutes;
+    return minutes === 0 ? 0 : minutes - 1;
 };
