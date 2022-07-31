@@ -4,34 +4,39 @@
  * @return {number}
  */
 var countComponents = function(n, edges) {
-    const parents = Array.from(Array(n), (x, i) => i);
-    const rank = Array(n).fill(1);
-    
-    const find = (n) => {
-        let p = parents[n];
-        while (p !== parents[p]) {
-            parents[p] = parents[parents[p]];
-            p = parents[p];
-        }
-        return p;
+    const root = [];
+    const rank = [];
+    for (let i = 0; i < n; i++) {
+        root.push(i);
+        rank.push(1);
     }
-    const union = (n1, n2) => {
-        let [p1, p2] = [find(n1), find(n2)];
+    
+    const find = x => x === root[x] ? x : find(root[x]);
+    
+    const union = (x, y) => {
+        const rootX = find(x);
+        const rootY = find(y);
         
-        if (p1 === p2) return false;
+        if (rootX === rootY) return false;
         
-        if (rank[p1] > rank[p2]) {
-            parents[p2] = p1;
-            rank[p1] += rank[p2];
+        if (rank[rootX] > rank[rootY]) {
+            root[rootY] = rootX;
+        } else if (rank[rootX] < rank[rootY]) {
+            root[rootX] = rootY;
         } else {
-            parents[p1] = p2;
-            rank[p2] += rank[p1];
+            root[rootY] = rootX;
+            rank[rootX]++;
         }
         return true;
     }
-    for (let [n1, n2] of edges) {
-        if (union(n1, n2)) n--;
+    
+    for (const [x, y] of edges) {
+        union(x, y);
     }
     
-    return n;
+    const components = new Set();
+    
+    for (let i = 0; i < n; i++) components.add(find(i));
+    
+    return components.size;
 };
