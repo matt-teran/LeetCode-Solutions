@@ -21,10 +21,11 @@ var findRedundantConnection = function(edges) {
         
         if (rank[rootX] > rank[rootY]) {
             root[rootY] = rootX;
-            rank[rootX] += rank[rootY];
-        } else {
+        } else if (rank[rootX] < rank[rootY]){
             root[rootX] = rootY;
-            rank[rootY] += rank[rootX];
+        } else {
+            root[rootY] = rootX;
+            rank[rootX]++;
         }
         return true;
     }
